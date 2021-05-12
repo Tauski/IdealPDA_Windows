@@ -1,7 +1,10 @@
 #include "credentialsgateway.h"
+#include "ProgramSettings.h"
+
 
 CredentialsGateway::CredentialsGateway(QObject *parent)
     : QObject(parent)
+    , m_username("")
     , m_credentialsStatus(false)
 {
     m_manager = new QNetworkAccessManager(this);
@@ -24,6 +27,9 @@ void CredentialsGateway::checkCredentials(QString ccName, QString ccPassword)
     params.addQueryItem("password",ccPassword);
     QNetworkRequest request(registerUrl);
     m_manager->post(request,params.query().toUtf8());
+
+    //modifying global username from programSettings
+    g_username = ccName;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

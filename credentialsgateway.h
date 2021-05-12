@@ -53,9 +53,11 @@ private:
     const QString m_loginUrl = "http://192.168.1.103:8012/project/Credentials/UserLogin.php";
     const QString m_deleteUserUrl = "WIP";
 
+    QString m_username;
+
     QNetworkAccessManager *m_manager; //manager object
 
-    bool m_credentialsStatus = false; //Status of given credentials false by default and if found correct changed to true
+    bool m_credentialsStatus; //Status of given credentials false by default and if found correct changed to true
 
 };
 

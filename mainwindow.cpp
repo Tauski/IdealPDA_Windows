@@ -42,3 +42,16 @@ void MainWindow::on_pb1_clicked()
         this->show();
     }
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+void MainWindow::on_pb5_clicked()
+{
+    this->hide();
+    NoteListDialog notelist;
+    if(notelist.exec() == QDialog::Accepted)
+    {
+        qDebug() << "notelistDialog accepted";
+        this->show();
+    }
+}

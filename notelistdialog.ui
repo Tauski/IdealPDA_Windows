@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>NoteDialog</class>
- <widget class="QDialog" name="NoteDialog">
+ <class>NoteListDialog</class>
+ <widget class="QDialog" name="NoteListDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>597</width>
-    <height>600</height>
+    <width>535</width>
+    <height>559</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,37 +15,15 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Header</string>
+    <widget class="QGroupBox" name="gb_noteButtons">
+     <property name="title">
+      <string>GroupBox</string>
      </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QLineEdit" name="le_noteHeader"/>
-   </item>
-   <item>
-    <widget class="QTextEdit" name="te_noteBody"/>
-   </item>
-   <item>
-    <widget class="QRadioButton" name="rb_noteDiag">
-     <property name="text">
-      <string>Microphone</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="pb_noteDiagSave">
-     <property name="text">
-      <string>Save</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="pb_noteDiagDelete">
-     <property name="text">
-      <string>Delete</string>
-     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <layout class="QVBoxLayout" name="gb_layout"/>
+      </item>
+     </layout>
     </widget>
    </item>
    <item>
@@ -65,7 +43,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>NoteDialog</receiver>
+   <receiver>NoteListDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -81,7 +59,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>NoteDialog</receiver>
+   <receiver>NoteListDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

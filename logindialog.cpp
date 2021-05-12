@@ -1,5 +1,6 @@
 #include "logindialog.h"
 #include "ui_logindialog.h"
+#include "ProgramSettings.h"
 
 LoginDialog::LoginDialog(QWidget *parent) :
     QDialog(parent),
@@ -22,7 +23,7 @@ LoginDialog::~LoginDialog()
 void LoginDialog::loginDone()
 {
     qDebug() << "login done";
-    //ui->stackedWidget->setCurrentIndex(1);
+
     this->accept();
 }
 

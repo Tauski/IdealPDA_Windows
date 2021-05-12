@@ -62,7 +62,7 @@
           <item row="1" column="1">
            <widget class="QPushButton" name="pb5">
             <property name="text">
-             <string>PushButton</string>
+             <string>All saved notes</string>
             </property>
            </widget>
           </item>

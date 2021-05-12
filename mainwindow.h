@@ -10,6 +10,7 @@
 #include "credentialsgateway.h"
 #include "notedialog.h"
 #include "calendardialog.h"
+#include "notelistdialog.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -35,6 +36,8 @@ private slots:
 
     ///Handling Calendar buttons press
     void on_pb1_clicked();
+
+    void on_pb5_clicked();
 
 private:
 

@@ -36,14 +36,17 @@ private slots:
     ///Slot for managers reply
     void noteSent(QNetworkReply * nReply);
 
-    ///Save button clicked handling
-    void on_buttonBox_accepted();
+    void on_pb_noteDiagSave_clicked();
+
+    void on_pb_noteDiagDelete_clicked();
 
 private:
     Ui::NoteDialog *ui;
 
     ///Specific url for saving user given notes.
     const QString m_saveUrl = "http://192.168.1.103:8012/project/Notepad/userNotesInsert.php";
+
+    const QString m_deleteUrl = "http://192.168.1.103:8012/project/Notepad/userNotesDelete.php";
 
     ///object of manager
     QNetworkAccessManager* m_manager;
