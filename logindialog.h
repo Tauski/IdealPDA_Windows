@@ -5,10 +5,16 @@
 
 #include "credentialsgateway.h"
 
+
+
 namespace Ui {
 class LoginDialog;
 }
 
+/**
+    \brief Handles sending data connected to credentials.
+    Like new users registration and users login
+*/
 class LoginDialog : public QDialog
 {
     Q_OBJECT
@@ -19,18 +25,26 @@ public:
 
 private slots:
 
+    //Page 1 Register buttons clicked method handling
     void on_pb_diaReg_clicked();
+
+    //Page 1 Login buttons clicked method handling
     void on_pb_login_clicked();
+
+    //Page 2 Register buttons clicked method handling
     void on_pb_newRegister_clicked();
 
 public slots:
 
+    //Retrieves emitted signal from credentialsGateway when login is done
     void loginDone();
+
+    //Retrieves emitted signal from credentialsGateway when registration is done
     void registerDone();
 
 private:
     Ui::LoginDialog *ui;
-    CredentialsGateway m_gateway;
+    CredentialsGateway m_gateway; //object of CredentialsGateway
     bool m_credentials = false;
 };
 

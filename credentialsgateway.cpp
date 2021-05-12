@@ -14,6 +14,8 @@ CredentialsGateway::~CredentialsGateway()
     delete m_manager;
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CredentialsGateway::checkCredentials(QString ccName, QString ccPassword)
 {
     QUrl registerUrl(m_loginUrl);
@@ -23,6 +25,8 @@ void CredentialsGateway::checkCredentials(QString ccName, QString ccPassword)
     QNetworkRequest request(registerUrl);
     m_manager->post(request,params.query().toUtf8());
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CredentialsGateway::registerUser(QString rName, QString rPassword, QString rEmail)
 {
@@ -35,20 +39,21 @@ void CredentialsGateway::registerUser(QString rName, QString rPassword, QString 
     m_manager->post(request,params.query().toUtf8());
 }
 
-void CredentialsGateway::findUser(QString fuName)
-{
-    qDebug() << fuName;
-}
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CredentialsGateway::findUserByEmail(QString fuEmail)
 {
     qDebug() << fuEmail;
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
 bool CredentialsGateway::getCredentialsStatus()
 {
     return m_credentialsStatus;
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CredentialsGateway::fileDownloaded(QNetworkReply* pReply)
 {
@@ -77,4 +82,6 @@ void CredentialsGateway::fileDownloaded(QNetworkReply* pReply)
     {
         emit deleteDone();
     }*/
+
+    pReply->deleteLater();
 }

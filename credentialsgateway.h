@@ -13,29 +13,38 @@
 #include <QUrl>
 
 /**
-  BRIEF:
-  handles all credential interactions with REST api
-
-
+  \brief handles all credential interactions with REST api
 */
 class CredentialsGateway : public QObject
 {
     Q_OBJECT
 
 public:
+
     CredentialsGateway(QObject *parent = nullptr);
     ~CredentialsGateway();
 
+    //Reply slot for networkaccessmanager
     void fileDownloaded(QNetworkReply* pReply);
+
+    //checks given credentials from database
     void checkCredentials(QString ccName, QString ccPassword);
+
+    //Registers new user with given parameters
     void registerUser(QString rName, QString rPassword, QString rEmail);
-    void findUser(QString fuName);
+
+    //Searches given user by email
     void findUserByEmail(QString fuEmail);
+
+    //Status of given credentials false if not found
     bool getCredentialsStatus();
 
 signals:
 
+    //Emited to logindialogs loginDone() slot
     void requestDone();
+
+    //Emited to logindialogs registedDone() slot
     void registerDone();
 
 private:
@@ -44,9 +53,9 @@ private:
     const QString m_loginUrl = "http://192.168.1.103:8012/project/Credentials/UserLogin.php";
     const QString m_deleteUserUrl = "WIP";
 
-    QNetworkAccessManager *m_manager;
+    QNetworkAccessManager *m_manager; //manager object
 
-    bool m_credentialsStatus;
+    bool m_credentialsStatus = false; //Status of given credentials false by default and if found correct changed to true
 
 };
 

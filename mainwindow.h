@@ -15,6 +15,11 @@ QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
+/**
+    \brief Mainwindow class that will hold some kind of storage for
+    all different PDA functionality dialogs.
+    for now only different buttons for different dialogs.
+*/
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -25,8 +30,10 @@ public:
 
 private slots:
 
+    ///Handling Note buttons press
     void on_pb2_clicked();
 
+    ///Handling Calendar buttons press
     void on_pb1_clicked();
 
 private:
