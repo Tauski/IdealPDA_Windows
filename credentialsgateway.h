@@ -9,7 +9,6 @@
 #include <QUrlQuery>
 #include <QByteArray>
 #include <QObject>
-#include <QVector>
 #include <QUrl>
 
 /**
@@ -39,6 +38,8 @@ public:
     //Status of given credentials false if not found
     bool getCredentialsStatus();
 
+    void getEmail(QString name);
+
 signals:
 
     //Emited to logindialogs loginDone() slot
@@ -51,6 +52,7 @@ private:
 
     const QString m_insertUrl = "http://192.168.1.103:8012/project/Credentials/insert.php";
     const QString m_loginUrl = "http://192.168.1.103:8012/project/Credentials/UserLogin.php";
+    const QString m_getEmailUrl = "http://192.168.1.103:8012/project/Credentials/userGetEmail.php";
     const QString m_deleteUserUrl = "WIP";
 
     QString m_username;

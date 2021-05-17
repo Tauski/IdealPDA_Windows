@@ -25,27 +25,26 @@ public:
 
 private slots:
 
-    //Page 1 Register buttons clicked method handling
+    ///Page 1 Register buttons clicked method handling
     void on_pb_diaReg_clicked();
 
-    //Page 1 Login buttons clicked method handling
+    ///Page 1 Login buttons clicked
     void on_pb_login_clicked();
 
-    //Page 2 Register buttons clicked method handling
+    ///Page 2 Register buttons clicked method handling
     void on_pb_newRegister_clicked();
 
 public slots:
 
-    //Retrieves emitted signal from credentialsGateway when login is done
+    ///Retrieves emitted signal from credentialsGateway when login is done
     void loginDone();
 
-    //Retrieves emitted signal from credentialsGateway when registration is done
+    ///Retrieves emitted signal from credentialsGateway when registration is done
     void registerDone();
 
 private:
     Ui::LoginDialog *ui;
-    CredentialsGateway m_gateway; //object of CredentialsGateway
-    bool m_credentials = false;
+    CredentialsGateway m_gateway; ///object of CredentialsGateway
 };
 
 #endif // LOGINDIALOG_H

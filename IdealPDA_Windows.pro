@@ -16,7 +16,8 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     notedialog.cpp \
-    notelistdialog.cpp
+    notelistdialog.cpp \
+    profiledialog.cpp
 
 HEADERS += \
     ProgramSettings.h \
@@ -25,14 +26,16 @@ HEADERS += \
     logindialog.h \
     mainwindow.h \
     notedialog.h \
-    notelistdialog.h
+    notelistdialog.h \
+    profiledialog.h
 
 FORMS += \
     calendardialog.ui \
     logindialog.ui \
     mainwindow.ui \
     notedialog.ui \
-    notelistdialog.ui
+    notelistdialog.ui \
+    profiledialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

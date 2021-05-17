@@ -3,4 +3,5 @@
 
 // ALL THE GLOBAL DEFINITIONS
 
-QString g_username = "placeholder";
+QString g_username = "namePlaceholder";
+QString g_userEmail = "emailPlaceHolder";

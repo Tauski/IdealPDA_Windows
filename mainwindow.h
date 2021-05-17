@@ -11,6 +11,7 @@
 #include "notedialog.h"
 #include "calendardialog.h"
 #include "notelistdialog.h"
+#include "profiledialog.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -38,6 +39,8 @@ private slots:
     void on_pb1_clicked();
 
     void on_pb5_clicked();
+
+    void on_pb9_clicked();
 
 private:
 

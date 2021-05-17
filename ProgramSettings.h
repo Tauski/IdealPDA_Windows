@@ -10,5 +10,6 @@ class QString;
 QT_END_NAMESPACE
 
 extern QString g_username;
+extern QString g_userEmail;
 
 #endif // PROGRAMSETTINGS_H

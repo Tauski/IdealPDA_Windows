@@ -9,7 +9,6 @@ CredentialsGateway::CredentialsGateway(QObject *parent)
 {
     m_manager = new QNetworkAccessManager(this);
     connect(m_manager, &QNetworkAccessManager::finished, this, &CredentialsGateway::fileDownloaded);
-
 }
 
 CredentialsGateway::~CredentialsGateway()
@@ -30,6 +29,8 @@ void CredentialsGateway::checkCredentials(QString ccName, QString ccPassword)
 
     //modifying global username from programSettings
     g_username = ccName;
+
+    getEmail(g_username);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -59,15 +60,28 @@ bool CredentialsGateway::getCredentialsStatus()
     return m_credentialsStatus;
 }
 
+void CredentialsGateway::getEmail(QString name)
+{
+    QUrl getEmailUrl(m_getEmailUrl);
+    QUrlQuery params;
+    params.addQueryItem("f_name",name);
+    QNetworkRequest request(getEmailUrl);
+    m_manager->post(request,params.query().toUtf8());
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 void CredentialsGateway::fileDownloaded(QNetworkReply* pReply)
 {
     QByteArray replyArray = pReply->readAll();
-    qDebug()<< replyArray;
     QString replyString = replyArray;
 
-    if(replyString == "Data Matched")
+    //if reply string contains @ sign it should be email address
+    if(replyString.contains("@"))
+    {
+        g_userEmail = replyString;
+    }
+    else if(replyString == "Data Matched")
     {
         m_credentialsStatus = true;
         emit requestDone();
@@ -83,11 +97,6 @@ void CredentialsGateway::fileDownloaded(QNetworkReply* pReply)
         msgBox.setText("Error while inserting or retrieving data from database");
         msgBox.exec();
     }
-
-    /*else if(replyString == "user deleted successfully")
-    {
-        emit deleteDone();
-    }*/
 
     pReply->deleteLater();
 }
