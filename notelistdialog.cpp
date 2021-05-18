@@ -1,7 +1,6 @@
 #include "notelistdialog.h"
 #include "ProgramSettings.h"
 #include "ui_notelistdialog.h"
-#include "notedialog.h"
 
 NoteListDialog::NoteListDialog(QWidget *parent) :
     QDialog(parent),
@@ -64,7 +63,16 @@ void NoteListDialog::onRequestFinished(QNetworkReply *nlReply)
 
                     //Connect signal for created noteButton and add it to layout
                     connect(button,SIGNAL(clicked()),this,SLOT(noteClicked()));
-                    m_noteVector.push_back(note);
+
+                    //create vector that holds notes and headers
+                    if(!button->text().isEmpty())
+                    {
+                        QPair<QString,QString> pairHeader;
+                        pairHeader.first = button->text(); //this contains header
+                        pairHeader.second = note.split(QRegExp("H:")).at(1); //bring only body of the note
+                        m_noteVector.push_back(pairHeader);
+                    }
+
                     qDebug() << "note: " << note;
                     ui->gb_layout->addWidget(button);
                 }
@@ -96,9 +104,9 @@ void NoteListDialog::noteClicked()
     for(int i = 0; i < m_noteVector.size(); i++)
     {
         //If note contains dedicated header string we need to get whole string for noteDialog
-        if(m_noteVector.at(i).contains(button->text()))
+        if(m_noteVector.at(i).first == button->text())
         {
-            noteConstructorString = m_noteVector.at(i);
+            noteConstructorString = m_noteVector.at(i).first + "H:" + m_noteVector.at(i).second;
         }
         else //We can just send the button text
         {
@@ -107,11 +115,18 @@ void NoteListDialog::noteClicked()
     }
 
     //create new noteDialog with existing note
+    qDebug() << "note constructor string = " << noteConstructorString;
+
     NoteDialog newNote(this, noteConstructorString);
     if(newNote.exec() == QDialog::Accepted)
     {
            qDebug() << "noteDialog accepted from list";
-
+           this->accept();
            //this->show(); //TODO figure out why this doesn't work
     }
+}
+
+void NoteListDialog::updateList()
+{
+
 }

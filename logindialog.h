@@ -5,8 +5,6 @@
 
 #include "credentialsgateway.h"
 
-
-
 namespace Ui {
 class LoginDialog;
 }

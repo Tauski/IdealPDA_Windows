@@ -1,25 +1,17 @@
 #ifndef NOTELISTDIALOG_H
 #define NOTELISTDIALOG_H
 
-#include <QDialog>
-#include <QPushButton>
 #include <QNetworkAccessManager>
-#include <QSignalMapper>
 #include <QNetworkRequest>
-#include <QMessageBox>
 #include <QNetworkReply>
-#include <QUrlQuery>
 #include <QJsonDocument>
+#include <QMessageBox>
+#include <QPushButton>
 #include <QJsonObject>
 #include <QJsonArray>
-#include <QByteArray>
-#include <QObject>
-#include <QVector>
-#include <QUrl>
-#include <QByteArrayList>
+#include <QUrlQuery>
 
-
-
+#include "notedialog.h"
 
 namespace Ui {
 class NoteListDialog;
@@ -38,7 +30,7 @@ public:
     explicit NoteListDialog(QWidget *parent = nullptr);
     ~NoteListDialog();
 
-public slots:
+private slots:
 
     ///Sends request to get all notes from database
     void retrieveNotes();
@@ -51,14 +43,17 @@ public slots:
 
 private:
 
+    ///Updates list after closing note dialog
+    void updateList();
+
     ///NoteListDialog UI object
     Ui::NoteListDialog *ui;
 
     ///Url used to get all notes from database
     const QString m_getAllNotesUrl = "http://192.168.1.103:8012/project/Notepad/userNotesGet.php";
 
-    ///Vector witch has all notes
-    QVector<QString> m_noteVector;
+    ///Vector witch has all notes header in first string, body in second
+    QVector<QPair<QString,QString>> m_noteVector;
 
     ///Object of NetworkAccessManager
     QNetworkAccessManager * m_manager;

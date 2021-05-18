@@ -1,18 +1,12 @@
 #ifndef NOTEDIALOG_H
 #define NOTEDIALOG_H
 
-#include <QDialog>
-
-#include <QString>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QMessageBox>
 #include <QNetworkReply>
 #include <QUrlQuery>
-#include <QByteArray>
-#include <QObject>
 #include <QVector>
-#include <QUrl>
 
 namespace Ui {
 class NoteDialog;
@@ -44,6 +38,8 @@ private slots:
 
     ///Slot for managers reply
     void noteSent(QNetworkReply * nReply);
+
+    void on_pg_noteDiagExit_clicked();
 
 private:
 

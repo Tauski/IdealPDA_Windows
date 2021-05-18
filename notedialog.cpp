@@ -29,6 +29,10 @@ NoteDialog::NoteDialog(QWidget *parent, QString savedNote):
         }
         m_isOldNote = true;
     }
+    else //we are new note so hide delete button
+    {
+        ui->pb_noteDiagDelete->hide();
+    }
     connect(m_manager, &QNetworkAccessManager::finished,this, &NoteDialog::noteSent);
 }
 
@@ -116,4 +120,9 @@ void NoteDialog::noteSent(QNetworkReply *nReply)
     QByteArray noteArray = nReply->readAll();
     nReply->deleteLater();
     this->accept(); //send accepted signal when regardless of reply type
+}
+
+void NoteDialog::on_pg_noteDiagExit_clicked()
+{
+    this->accept();
 }

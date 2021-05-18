@@ -4,7 +4,6 @@
 
 CredentialsGateway::CredentialsGateway(QObject *parent)
     : QObject(parent)
-    , m_username("")
     , m_credentialsStatus(false)
 {
     m_manager = new QNetworkAccessManager(this);

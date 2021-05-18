@@ -4,8 +4,6 @@
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QStackedWidget>
-#include <QDebug>
-#include <QObject>
 
 #include "credentialsgateway.h"
 #include "notedialog.h"
