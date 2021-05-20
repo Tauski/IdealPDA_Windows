@@ -11,6 +11,7 @@ CONFIG += c++11
 SOURCES += \
     ProgramSettings.cpp \
     calendardialog.cpp \
+    calendareventdialog.cpp \
     credentialsgateway.cpp \
     logindialog.cpp \
     main.cpp \
@@ -22,6 +23,7 @@ SOURCES += \
 HEADERS += \
     ProgramSettings.h \
     calendardialog.h \
+    calendareventdialog.h \
     credentialsgateway.h \
     logindialog.h \
     mainwindow.h \
@@ -31,6 +33,7 @@ HEADERS += \
 
 FORMS += \
     calendardialog.ui \
+    calendareventdialog.ui \
     logindialog.ui \
     mainwindow.ui \
     notedialog.ui \
