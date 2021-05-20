@@ -19,7 +19,9 @@ class NoteListDialog;
 
 /**
     \brief Dynamically scalable list that holds buttons for each note in the
-    database. By pressing on note we open new noteDialog with given note
+    database. By pressing on note button we open new noteDialog with given note
+
+    \todo: perhaps integrate this on notedialog class, for clarity
 */
 class NoteListDialog : public QDialog
 {

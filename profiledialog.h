@@ -15,7 +15,7 @@ class ProfileDialog;
 }
 
 /**
-    \brief Window with fields to change credential data and
+    \brief Dialog with fields to change credential data and
     program preferences(TODO)
 */
 class ProfileDialog : public QDialog

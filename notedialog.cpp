@@ -116,9 +116,11 @@ void NoteDialog::updateNote(QString newHeader, QString newBody)
 
 void NoteDialog::noteSent(QNetworkReply *nReply)
 {
-    //handle note sent errors
+
     QByteArray noteArray = nReply->readAll();
     nReply->deleteLater();
+
+    ///todo: handle all error possibilities using using noteArray that holds echo from php api
     this->accept(); //send accepted signal when regardless of reply type
 }
 

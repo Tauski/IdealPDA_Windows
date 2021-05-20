@@ -16,7 +16,7 @@ MainWindow::~MainWindow()
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-///Button signal handlers
+///ALL mainwindow button signal handlers
 
 
 void MainWindow::on_pb2_clicked()

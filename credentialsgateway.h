@@ -60,7 +60,7 @@ private:
     //const QString m_deleteUserUrl;
 
     ///Object of networkaccessmanager
-    QNetworkAccessManager *m_manager; //manager object
+    QNetworkAccessManager *m_manager;
 
     ///Flag if credentials are usable
     bool m_credentialsStatus;

@@ -39,6 +39,7 @@ private slots:
     ///Slot for managers reply
     void noteSent(QNetworkReply * nReply);
 
+    ///Slot for exit button clicked, Closes the dialog with accepted signal so Notelist or mainwindow can continue.
     void on_pg_noteDiagExit_clicked();
 
 private:
@@ -57,7 +58,7 @@ private:
     const QString m_deleteUrl = "http://192.168.1.103:8012/project/Notepad/userNotesDelete.php";
     const QString m_updateUrl = "http://192.168.1.103:8012/project/Notepad/userNotesUpdate.php";
 
-    ///Saved note that was used in constructor
+    ///Saved note that was used in the constructor
     const QString m_savedNote;
 
     ///object of manager
