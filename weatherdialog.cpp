@@ -4,6 +4,7 @@
 WeatherDialog::WeatherDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::WeatherDialog),
+    m_forecastHour(0),
     m_location("")
 {
     ui->setupUi(this);
@@ -12,6 +13,13 @@ WeatherDialog::WeatherDialog(QWidget *parent) :
     ui->wd_label_temperature->setText("0°C");
     ui->wd_label_weather->setText("fair weather");
     ui->wd_label_wind->setText("0/ms");
+
+    ///start with page 1
+    ui->stackedwidget_wd->setCurrentIndex(0);
+
+    ///disable previous forecast from 0
+    ui->wd_pb_forecast_previoushour->setDisabled(true);
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -27,7 +35,7 @@ WeatherDialog::~WeatherDialog()
 void WeatherDialog::onWeatherRefresh()
 {
     m_weatherCaller = new WeatherDataCaller(nullptr,0);
-    connect(m_weatherCaller, SIGNAL(finished()), this, SLOT(setLabelValues()));
+    connect(m_weatherCaller, SIGNAL(weatherFinished()), this, SLOT(setLabelValues()));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,11 +55,157 @@ void WeatherDialog::setLabelValues()
     }
     else
     {
-        qWarning() << "Warning! No weather data";
+        qWarning() << "Warning! No weather data!";
     }
 
     //Manual delete for solver
     //delete m_weatherSolver;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+void WeatherDialog::setForecastValues()
+{
+    //Get forecast data from caller and insert it into local vector
+    QVector<QPair<QString,QVector<QString>>> forecastVector = m_weatherCaller->getWeatherForecast();
+
+    QString weatherType = "";
+    switch (forecastVector.at(m_forecastHour).second.at(6).split(".").first().toInt())
+    {
+
+    case 1:
+        weatherType = "Clear";
+    break;
+
+    case 2:
+        weatherType = "Partly cloudy";
+    break;
+
+    case 3:
+        weatherType = "Cloudy";
+    break;
+
+    case 21:
+        weatherType = "Periodical rain showers";
+    break;
+
+    case 22:
+        weatherType = "Rain showers";
+    break;
+
+    case 23:
+        weatherType = "Intense rain showers";
+    break;
+
+    case 31:
+        weatherType = "Faint rain";
+    break;
+
+    case 32:
+        weatherType = "Rain";
+    break;
+
+    case 33:
+        weatherType = "Intense rain";
+    break;
+
+    case 41:
+        weatherType = "Periodical snow showers";
+    break;
+
+    case 42:
+        weatherType = "snow showers";
+    break;
+
+    case 43:
+        weatherType = "Intense snow showers";
+    break;
+
+    case 51:
+        weatherType = "Fain snowfall";
+    break;
+
+    case 52:
+        weatherType = "Snowfall";
+    break;
+
+    case 53:
+        weatherType = "Intense snowfall";
+    break;
+
+    case 61:
+        weatherType = "Thunder showers";
+    break;
+
+    case 62:
+        weatherType = "Intense thunder showers";
+    break;
+
+    case 63:
+        weatherType = "Thunder";
+    break;
+
+    case 64:
+        weatherType = "Intense thundering";
+    break;
+
+    case 71:
+        weatherType = "Faint sleet showers";
+    break;
+
+    case 72:
+        weatherType = "Sleet showers";
+    break;
+
+    case 73:
+        weatherType = "Intense sleet showers";
+    break;
+
+    case 81:
+        weatherType = "Faint sleeting";
+    break;
+
+    case 82:
+        weatherType = "Sleeting";
+    break;
+
+    case 83:
+        weatherType = "Intense sleeting";
+    break;
+
+    case 91:
+        weatherType = "Haze";
+    break;
+
+    case 92:
+        weatherType = "Fog";
+    break;
+
+    }
+
+    //update UI
+    if(!forecastVector.isEmpty())
+    {
+
+        QDateTime curTime;
+        curTime.setSecsSinceEpoch(forecastVector.at(m_forecastHour).first.toLongLong());
+        ui->wd_label_p2header->setText(curTime.toString());
+        ui->wd_label_forecast_temperature->setText("Temperature C°:   " + forecastVector.at(m_forecastHour).second.at(0));
+        ui->wd_label_forecast_weather->setText("Weather type:   " + weatherType);
+        ui->wd_label_forecast_windspeed->setText("Windspeed m/s:   " +forecastVector.at(m_forecastHour).second.at(4));
+        ui->wd_label_forecast_winddirection->setText("Wind Direction 360°:   " +forecastVector.at(m_forecastHour).second.at(3));
+        ui->wd_label_forecast_gust->setText("Wind gusts at m/s:   " +forecastVector.at(m_forecastHour).second.at(5));
+        ui->wd_label_forecast_humidity->setText("Humidity %   " +forecastVector.at(m_forecastHour).second.at(2));
+        ui->wd_label_forecast_airpressure->setText("Airpressure hPa:   " +forecastVector.at(m_forecastHour).second.at(1));
+
+        m_forecastHour == 0 ? ui->wd_pb_forecast_previoushour->setDisabled(true) : ui->wd_pb_forecast_previoushour->setEnabled(true);
+        m_forecastHour == 35 ? ui->wd_pb_forecast_nexthour->setDisabled(true) : ui->wd_pb_forecast_nexthour->setEnabled(true);
+
+    }
+    else
+    {
+        qWarning() << "Warning! No forecast data!";
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -65,7 +219,11 @@ void WeatherDialog::on_wd_pb_curWeather_clicked()
 /// Shows hourly forecast
 void WeatherDialog::on_wd_pb_forecast_clicked()
 {
+    ///change to page 2
+    ui->stackedwidget_wd->setCurrentIndex(1);
+
     m_weatherCaller = new WeatherDataCaller(nullptr,1);
+    connect(m_weatherCaller, SIGNAL(forecastFinished()), this, SLOT(setForecastValues()));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,4 +234,35 @@ void WeatherDialog::on_wd_pb_change_clicked()
     {
         m_location = ui->wd_le_newLocation->text();
     }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+void WeatherDialog::on_wd_pb_forecast_previoushour_clicked()
+{
+    //If next button is not enabled when we press previous hour we enable this
+    if(!ui->wd_pb_forecast_nexthour->isEnabled())
+    {
+        ui->wd_pb_forecast_nexthour->setEnabled(true);
+    }
+
+    //remove from hours and reset UI
+    m_forecastHour -= 1;
+    setForecastValues();
+
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+void WeatherDialog::on_wd_pb_forecast_nexthour_clicked()
+{
+    //If previous button is not enabled when we press next hour we enable this
+    if(!ui->wd_pb_forecast_previoushour->isEnabled())
+    {
+        ui->wd_pb_forecast_previoushour->setEnabled(true);
+    }
+
+    //add to hours and reset UI
+    m_forecastHour += 1;
+    setForecastValues();
 }

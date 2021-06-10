@@ -30,13 +30,19 @@ public:
     ///Return weather data (usually to weatherDialog)
     QVector<QPair<QString,QString>> getWeatherData() const;
 
+    ///Return forecast data (usually to weatherDialog)
+    QVector<QPair<QString,QVector<QString>>> getWeatherForecast() const;
+
 signals:
 
     ///Emitted when manager has requests reply
     void downloaded(QByteArray);
 
-    ///Emitted when class has solved XML result and is ready to use in dialog
-    void finished();
+    ///Emitted when class has solved XML result for current weather
+    void weatherFinished();
+
+    ///Emitted when class has solver XML result for forecast
+    void forecastFinished();
 
 private slots:
 
@@ -56,6 +62,9 @@ private:
 
     ///Holds highest values of current weather data
     QVector<QPair<QString,QString>> m_highestVector;
+
+    ///Holds 36h forecast for chosen location
+    QVector<QPair<QString,QVector<QString>>> m_forecastVector;
 
     ///Manager instance
     QNetworkAccessManager *m_webCtrl;

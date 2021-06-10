@@ -18,91 +18,187 @@
     <widget class="QWidget" name="verticalWidget" native="true">
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
-        <item>
-         <widget class="QLabel" name="label">
-          <property name="text">
-           <string>Current Weather</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="wd_label_temperature">
-          <property name="text">
-           <string>temperature</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="wd_label_wind">
-          <property name="text">
-           <string>wind</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="wd_label_weather">
-          <property name="text">
-           <string>weather</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="wd_label_station">
-          <property name="text">
-           <string>current station</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <widget class="QStackedWidget" name="stackedwidget_wd">
+        <property name="currentIndex">
+         <number>1</number>
+        </property>
+        <widget class="QWidget" name="page">
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_3">
+            <item>
+             <widget class="QLabel" name="wd_label_p1header">
+              <property name="text">
+               <string>Current Weather</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="wd_label_temperature">
+              <property name="text">
+               <string>temperature</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="wd_label_wind">
+              <property name="text">
+               <string>wind</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="wd_label_weather">
+              <property name="text">
+               <string>weather</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="wd_label_station">
+              <property name="text">
+               <string>current station</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QPushButton" name="wd_pb_curWeather">
+              <property name="text">
+               <string>Current Weather</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="wd_pb_forecast">
+              <property name="text">
+               <string>Forecast </string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <widget class="QLabel" name="wd_label_location">
+              <property name="text">
+               <string>Location</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="wd_le_newLocation"/>
+            </item>
+            <item>
+             <widget class="QPushButton" name="wd_pb_change">
+              <property name="text">
+               <string>Change</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="page_2">
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_6">
+            <item>
+             <widget class="QLabel" name="wd_label_p2header">
+              <property name="text">
+               <string>TextLabel</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="wd_label_forecast_temperature">
+              <property name="text">
+               <string>TextLabel</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="wd_label_forecast_windspeed">
+              <property name="text">
+               <string>TextLabel</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="wd_label_forecast_gust">
+              <property name="text">
+               <string>TextLabel</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="wd_label_forecast_winddirection">
+              <property name="text">
+               <string>TextLabel</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="wd_label_forecast_weather">
+              <property name="text">
+               <string>TextLabel</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="wd_label_forecast_humidity">
+              <property name="text">
+               <string>TextLabel</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="wd_label_forecast_airpressure">
+              <property name="text">
+               <string>TextLabel</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QPushButton" name="wd_pb_forecast_previoushour">
+              <property name="text">
+               <string>Previous hour</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="wd_pb_forecast_nexthour">
+              <property name="text">
+               <string>Next hour</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </widget>
       </item>
      </layout>
     </widget>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QPushButton" name="wd_pb_curWeather">
-       <property name="text">
-        <string>Current Weather</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="wd_pb_forecast">
-       <property name="text">
-        <string>Forecast </string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Location</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="wd_le_newLocation"/>
-     </item>
-     <item>
-      <widget class="QPushButton" name="wd_pb_change">
-       <property name="text">
-        <string>Change</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </item>
   </layout>
  </widget>

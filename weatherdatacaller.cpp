@@ -32,7 +32,7 @@ WeatherDataCaller::WeatherDataCaller(QObject *parent, int typeID)
         QNetworkRequest request(weatherUrl);
         qDebug()<<"created requeset with url:" << weatherUrl;
         m_webCtrl->get(request);
-        qDebug()<<"get Request";
+        qDebug()<<"get Request weather";
     }
     else /// we wanted weather forecast
     {
@@ -41,7 +41,7 @@ WeatherDataCaller::WeatherDataCaller(QObject *parent, int typeID)
         QNetworkRequest request(weatherUrl);
         qDebug()<<"created requeset with url:" << weatherUrl;
         m_webCtrl->get(request);
-        qDebug()<<"get Request";
+        qDebug()<<"get Request forecast";
     }
 }
 
@@ -63,7 +63,7 @@ void WeatherDataCaller::fileDownloaded(QNetworkReply* pReply)
     pReply->deleteLater();
     m_webCtrl->deleteLater();
 
-    emit downloaded(m_downloadedData);
+    solveData(m_downloadedData);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -135,12 +135,15 @@ QVector<QString> WeatherDataCaller::getTimes()
 ///Previous solver side
 void WeatherDataCaller::solveData(QByteArray resultArray)
 {
-    //non pointer approach
+    ///Streamreader instance
     QXmlStreamReader m_XMLreader(resultArray);
 
-    //container for xml numerical values
+    ///forecast
+    QStringList valueList;
+    QStringList timeList;
+
+    ///Current weather
     QVector<QString> xmlVector;
-    //container for all values with corresponding station
     QVector<QPair<QString,QString>> allValues;
 
     //Searching for tokens that give name and value from whole file
@@ -161,9 +164,25 @@ void WeatherDataCaller::solveData(QByteArray resultArray)
             {
                 xmlVector.push_back(m_XMLreader.readElementText());
             }
-            else if(m_XMLreader.name() == "doubleOrNilReasonTupleList")
+            else if(m_XMLreader.name() == "positions") // gets time and positions
             {
                 xmlVector.push_back(m_XMLreader.readElementText());
+                timeList = xmlVector.at(0).split(" ");
+
+                //Split from xml vector causes some unnecessary characters so remove them
+                timeList.removeAll("\n");
+                timeList.removeAll("");
+                xmlVector.clear();
+            }
+            else if(m_XMLreader.name() == "doubleOrNilReasonTupleList") //gets values
+            {
+                xmlVector.push_back(m_XMLreader.readElementText());
+                valueList = xmlVector.at(0).split(" ");
+
+                //Split from xml vector causes some unnecessary characters so remove them
+                valueList.removeAll("\n");
+                valueList.removeAll("");
+                xmlVector.clear();
             }
         }
     }
@@ -174,10 +193,8 @@ void WeatherDataCaller::solveData(QByteArray resultArray)
     }
     else
     {
-        qDebug() << "this is the size ";
-/*
         //handle data from different stations
-        if(!xmlVector.empty())
+        if(!xmlVector.empty() && valueList.empty())
         {
             //iterate every other element to only include numeric values
             QPair<QString, QString> station_valuePair;
@@ -202,15 +219,38 @@ void WeatherDataCaller::solveData(QByteArray resultArray)
                     }
             }
         }
+        else if(!timeList.empty())
+        {
+            int valueIncrement = 0;
+            for(int i = 2; i < timeList.size(); i += 3)
+            {
+                QPair<QString,QVector<QString>> timeValue;
+                timeValue.first = timeList.at(i);
+                for(int j = 0+valueIncrement; j < valueList.size(); j++)
+                {
+                    if(j == 1+valueIncrement || j == 2+valueIncrement || j == 3+valueIncrement || j == 4+valueIncrement|| j == 5+valueIncrement || j == 9+valueIncrement || j == 12+valueIncrement)
+                    {
+                        timeValue.second.push_back(valueList.at(j));
+                    }
+                }
+                valueIncrement += 24;
+                m_forecastVector.push_back(timeValue);
+            }
+            emit forecastFinished();
+        }
         else
         {
             qCritical() << "Error! Parsed XML data vector was empty!";
         }
-*/
     }
 
-    qDebug()<<"this is all values: "<< allValues;
-    findHighest(&allValues);
+    qDebug()<< m_forecastVector.at(35);
+
+    ///if we want weather we need to find highest
+    if(m_typeID == 0)
+    {
+        findHighest(&allValues);
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -279,7 +319,7 @@ void WeatherDataCaller::findHighest(QVector<QPair<QString, QString>> *compVector
     m_highestVector.push_back(QPair<QString,QString>(tempStation,QString::number(max_temp)));
     m_highestVector.push_back(QPair<QString,QString>(apStation,QString::number(max_ap)));
     m_highestVector.push_back(QPair<QString,QString>(QString::number(size/3),QString::number(size/3)));
-    emit finished();
+    emit weatherFinished();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -287,4 +327,11 @@ void WeatherDataCaller::findHighest(QVector<QPair<QString, QString>> *compVector
 QVector<QPair<QString,QString>> WeatherDataCaller::getWeatherData() const
 {
     return m_highestVector;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+QVector<QPair<QString,QVector<QString>>> WeatherDataCaller::getWeatherForecast() const
+{
+    return m_forecastVector;
 }

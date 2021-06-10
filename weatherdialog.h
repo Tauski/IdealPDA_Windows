@@ -28,13 +28,23 @@ private slots:
     ///Sets new values for dialogs labels
     void setLabelValues();
 
+    ///Sets new values for forecast labels
+    void setForecastValues();
+
     ///Current weather button pressed
     void on_wd_pb_curWeather_clicked();
 
     ///Shows Forecast
     void on_wd_pb_forecast_clicked();
 
+    ///changes forecast and weather location
     void on_wd_pb_change_clicked();
+
+    ///Shows previous hour on forecast
+    void on_wd_pb_forecast_previoushour_clicked();
+
+    ///Shows next hour in forecast
+    void on_wd_pb_forecast_nexthour_clicked();
 
 private:
 
@@ -42,6 +52,9 @@ private:
 
     ///WeatherDataCaller instance, retrieves current weather data from open API
     WeatherDataCaller *m_weatherCaller;
+
+    ///Forecast can hold up to 36 hours of data this keeps hold of current hour
+    int m_forecastHour;
 
     ///String of location we want weather data from
     QString m_location;

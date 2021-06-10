@@ -16,3 +16,5 @@ extern QString g_username;
 extern QString g_userEmail;
 
 #endif // PROGRAMSETTINGS_H
+
+
