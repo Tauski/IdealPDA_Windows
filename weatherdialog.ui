@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WeatherDialog</class>
+ <widget class="QDialog" name="WeatherDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>532</width>
+    <height>642</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QWidget" name="verticalWidget" native="true">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Current Weather</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="wd_label_temperature">
+          <property name="text">
+           <string>temperature</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="wd_label_wind">
+          <property name="text">
+           <string>wind</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="wd_label_weather">
+          <property name="text">
+           <string>weather</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="wd_label_station">
+          <property name="text">
+           <string>current station</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="wd_pb_curWeather">
+       <property name="text">
+        <string>Current Weather</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="wd_pb_forecast">
+       <property name="text">
+        <string>Forecast </string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>Location</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="wd_le_newLocation"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="wd_pb_change">
+       <property name="text">
+        <string>Change</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

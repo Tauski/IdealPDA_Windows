@@ -27,7 +27,7 @@
           <item row="3" column="0">
            <widget class="QPushButton" name="pb7">
             <property name="text">
-             <string>PushButton</string>
+             <string>weather</string>
             </property>
            </widget>
           </item>
@@ -41,7 +41,7 @@
           <item row="3" column="1">
            <widget class="QPushButton" name="pb8">
             <property name="text">
-             <string>PushButton</string>
+             <string>email</string>
             </property>
            </widget>
           </item>

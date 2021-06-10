@@ -26,6 +26,7 @@ public:
     explicit ProfileDialog(QWidget *parent = nullptr);
     ~ProfileDialog();
 
+    ///Go through regex check for regular email type, catches most type cases
     bool emailValid(QString email);
 
 private slots:

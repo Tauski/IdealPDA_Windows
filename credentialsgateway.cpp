@@ -93,7 +93,7 @@ void CredentialsGateway::fileDownloaded(QNetworkReply* pReply)
     {
         QMessageBox msgBox;
         msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setText("Error while inserting or retrieving data from database");
+        msgBox.setText("Couldn't connect to database");
         msgBox.exec();
     }
 

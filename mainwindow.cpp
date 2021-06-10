@@ -16,9 +16,8 @@ MainWindow::~MainWindow()
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-///ALL mainwindow button signal handlers
-
-
+/// \brief MainWindow::on_pb2_clicked
+/// Opens New Note Dialog
 void MainWindow::on_pb2_clicked()
 {
     this->hide();
@@ -31,7 +30,8 @@ void MainWindow::on_pb2_clicked()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-
+/// \brief MainWindow::on_pb1_clicked
+/// Opens Calendar dialog
 void MainWindow::on_pb1_clicked()
 {
     this->hide();
@@ -44,7 +44,8 @@ void MainWindow::on_pb1_clicked()
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-
+/// \brief MainWindow::on_pb5_clicked
+/// Opens all notes dialog
 void MainWindow::on_pb5_clicked()
 {
     this->hide();
@@ -56,6 +57,9 @@ void MainWindow::on_pb5_clicked()
     }
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+/// \brief MainWindow::on_pb9_clicked
+/// Opens Profile settings dialog
 void MainWindow::on_pb9_clicked()
 {
     this->hide();
@@ -63,6 +67,22 @@ void MainWindow::on_pb9_clicked()
     if(proDialog.exec() == QDialog::Accepted)
     {
         qDebug() << "profileDialog accepted";
+        this->show();
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+/// \brief MainWindow::on_pb7_clicked
+/// Opens Weather dialog
+///
+
+void MainWindow::on_pb7_clicked()
+{
+    this->hide();
+    WeatherDialog weaDialog;
+    if(weaDialog.exec() == QDialog::Accepted)
+    {
+        qDebug() << "Weather Dialog accepted";
         this->show();
     }
 }
