@@ -35,14 +35,18 @@ private slots:
 public slots:
 
     ///Retrieves emitted signal from credentialsGateway when login is done
-    void loginDone();
+    void loginAccepted();
 
     ///Retrieves emitted signal from credentialsGateway when registration is done
-    void registerDone();
+    void registerAccepted();
 
 private:
+
     Ui::LoginDialog *ui;
-    CredentialsGateway m_gateway; ///object of CredentialsGateway
+
+    ///instance of credentials gateway
+    CredentialsGateway m_gateway;
+
 };
 
 #endif // LOGINDIALOG_H

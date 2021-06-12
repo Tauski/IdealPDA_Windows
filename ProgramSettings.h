@@ -15,6 +15,9 @@ extern QString g_username;
 ///Global QString that holds email of the current user.
 extern QString g_userEmail;
 
+///Global QString that holds current location of user.
+extern QString g_userLocation;
+
 #endif // PROGRAMSETTINGS_H
 
 

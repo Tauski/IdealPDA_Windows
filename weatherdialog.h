@@ -1,8 +1,10 @@
 #ifndef WEATHERDIALOG_H
 #define WEATHERDIALOG_H
 
+#include <QMessageBox>
 #include <QDialog>
 #include "weatherdatacaller.h"
+#include "ProgramSettings.h"
 
 namespace Ui {
 class WeatherDialog;
@@ -37,14 +39,14 @@ private slots:
     ///Shows Forecast
     void on_wd_pb_forecast_clicked();
 
-    ///changes forecast and weather location
-    void on_wd_pb_change_clicked();
-
     ///Shows previous hour on forecast
     void on_wd_pb_forecast_previoushour_clicked();
 
     ///Shows next hour in forecast
     void on_wd_pb_forecast_nexthour_clicked();
+
+    ///Returns to current weather page
+    void on_wd_pb_forecast_back_clicked();
 
 private:
 

@@ -20,7 +20,7 @@
       <item>
        <widget class="QStackedWidget" name="stackedwidget_wd">
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="page">
          <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -99,13 +99,6 @@
             <item>
              <widget class="QLineEdit" name="wd_le_newLocation"/>
             </item>
-            <item>
-             <widget class="QPushButton" name="wd_pb_change">
-              <property name="text">
-               <string>Change</string>
-              </property>
-             </widget>
-            </item>
            </layout>
           </item>
          </layout>
@@ -176,18 +169,56 @@
            </layout>
           </item>
           <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_3">
+           <layout class="QVBoxLayout" name="verticalLayout_7">
             <item>
-             <widget class="QPushButton" name="wd_pb_forecast_previoushour">
-              <property name="text">
-               <string>Previous hour</string>
+             <layout class="QHBoxLayout" name="horizontalLayout_3">
+              <property name="sizeConstraint">
+               <enum>QLayout::SetDefaultConstraint</enum>
               </property>
-             </widget>
+              <item>
+               <widget class="QPushButton" name="wd_pb_forecast_previoushour">
+                <property name="minimumSize">
+                 <size>
+                  <width>100</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Previous hour</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="wd_pb_forecast_nexthour">
+                <property name="minimumSize">
+                 <size>
+                  <width>100</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>25</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Next hour</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </item>
             <item>
-             <widget class="QPushButton" name="wd_pb_forecast_nexthour">
+             <widget class="QPushButton" name="wd_pb_forecast_back">
               <property name="text">
-               <string>Next hour</string>
+               <string>Back</string>
               </property>
              </widget>
             </item>

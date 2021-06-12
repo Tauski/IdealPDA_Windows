@@ -34,17 +34,20 @@ private slots:
     ///Save changes on profile dialog.
     void on_pd_bp_saveChanges_clicked();
 
-    ///Detect changes on passwords linedit.
+    ///Detect changes on passwords lineEdit.
     void on_pd_le_newPass_editingFinished();
 
-    ///Detect changes on usernames linedit.
+    ///Detect changes on usernames lineEdit.
     void on_pd_le_newUsername_editingFinished();
 
-    ///Detect changes on emails linedit.
+    ///Detect changes on emails lineEdit.
     void on_pd_le_newEmail_editingFinished();
 
     ///Slot for retrieing managers finished signal with reply.
     void updateSent(QNetworkReply *uReply);
+
+    ///Detect changes on location lineEdit
+    void on_pd_le_newlocation_textChanged(const QString &arg1);
 
 private:
 
@@ -56,12 +59,16 @@ private:
     bool m_emailIsChanged;
     bool m_usernameIsChanged;
     bool m_passwordIsChanged;
+    bool m_locationIsChanged;
 
     ///Hold new username to update global username variable after reply.
     QString m_newUsername;
 
     ///Hold new email to update global email variable after reply.
     QString m_newEmail;
+
+    ///Holds new location to update global location variable if reply is correct
+    QString m_newLocation;
 
     ///Object of NetworkAccessManager
     QNetworkAccessManager * m_manager;

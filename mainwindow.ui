@@ -14,96 +14,85 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_5">
+   <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QStackedWidget" name="stackedWidget">
-      <property name="currentIndex">
-       <number>0</number>
-      </property>
-      <widget class="QWidget" name="page_2">
-       <layout class="QHBoxLayout" name="horizontalLayout_6">
-        <item>
-         <layout class="QGridLayout" name="gridLayout">
-          <item row="3" column="0">
-           <widget class="QPushButton" name="pb7">
-            <property name="text">
-             <string>weather</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QPushButton" name="pb3">
-            <property name="text">
-             <string>PushButton</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QPushButton" name="pb8">
-            <property name="text">
-             <string>email</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QPushButton" name="pb1">
-            <property name="text">
-             <string>calendar</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QPushButton" name="pb2">
-            <property name="text">
-             <string>Notes</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QPushButton" name="pb5">
-            <property name="text">
-             <string>All saved notes</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QPushButton" name="pb4">
-            <property name="text">
-             <string>PushButton</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QPushButton" name="pb6">
-            <property name="text">
-             <string>PushButton</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="2">
-           <widget class="QPushButton" name="pb9">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>199999</width>
-              <height>169393</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Profile</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-     </widget>
+     <layout class="QGridLayout" name="gridLayout">
+      <item row="3" column="0">
+       <widget class="QPushButton" name="mw_pb_weather">
+        <property name="text">
+         <string>Weather</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QPushButton" name="pb3">
+        <property name="text">
+         <string>PushButton</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QPushButton" name="mw_pb_email">
+        <property name="text">
+         <string>Email</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QPushButton" name="mw_pb_calendar">
+        <property name="text">
+         <string>calendar</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QPushButton" name="mw_pb_notes">
+        <property name="text">
+         <string>Notes</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QPushButton" name="mw_pb_notelist">
+        <property name="text">
+         <string>All saved notes</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QPushButton" name="pb4">
+        <property name="text">
+         <string>PushButton</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QPushButton" name="pb6">
+        <property name="text">
+         <string>PushButton</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2">
+       <widget class="QPushButton" name="mw_pb_profile">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>199999</width>
+          <height>169393</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Profile</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>

@@ -17,9 +17,16 @@ WeatherDialog::WeatherDialog(QWidget *parent) :
     ///start with page 1
     ui->stackedwidget_wd->setCurrentIndex(0);
 
-    ///disable previous forecast from 0
+    ///disable previous forecast from start
     ui->wd_pb_forecast_previoushour->setDisabled(true);
 
+    ///default location if not placeholder
+    if(g_userLocation != "locationPlaceHolder")
+    {
+        m_location = g_userLocation;
+        ui->wd_label_p1header->setText(g_userLocation);
+    }
+    onWeatherRefresh();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -34,8 +41,27 @@ WeatherDialog::~WeatherDialog()
 
 void WeatherDialog::onWeatherRefresh()
 {
-    m_weatherCaller = new WeatherDataCaller(nullptr,0);
-    connect(m_weatherCaller, SIGNAL(weatherFinished()), this, SLOT(setLabelValues()));
+    ///Update weather
+    if(ui->wd_le_newLocation->text().isEmpty() && g_userLocation == "locationPlaceHolder")
+    {
+        QMessageBox msgBox;
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.setText("You don't have default location selected, so please type wanted location on field below");
+        msgBox.exec();
+    }
+    else /// we have some location
+    {
+        ///if we have empty location lineedit
+        if(g_userLocation != "locationPlaceHolder" && ui->wd_le_newLocation->text().isEmpty())
+        {
+            m_weatherCaller = new WeatherDataCaller(nullptr,0,g_userLocation);
+        }
+        else if(g_userLocation != "locationPlaceHolder")/// line edit has data
+        {
+            m_weatherCaller = new WeatherDataCaller(nullptr,0,ui->wd_le_newLocation->text());
+        }
+        connect(m_weatherCaller, SIGNAL(weatherFinished()), this, SLOT(setLabelValues()));
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -57,9 +83,6 @@ void WeatherDialog::setLabelValues()
     {
         qWarning() << "Warning! No weather data!";
     }
-
-    //Manual delete for solver
-    //delete m_weatherSolver;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -184,12 +207,22 @@ void WeatherDialog::setForecastValues()
     }
 
     //update UI
+
+    QString locationString;
+    if(ui->wd_le_newLocation->text().isEmpty())
+    {
+        locationString = g_userLocation;
+    }
+    else
+    {
+        locationString = ui->wd_le_newLocation->text();
+    }
+
     if(!forecastVector.isEmpty())
     {
-
         QDateTime curTime;
         curTime.setSecsSinceEpoch(forecastVector.at(m_forecastHour).first.toLongLong());
-        ui->wd_label_p2header->setText(curTime.toString());
+        ui->wd_label_p2header->setText(curTime.toString() + " " + locationString);
         ui->wd_label_forecast_temperature->setText("Temperature C°:   " + forecastVector.at(m_forecastHour).second.at(0));
         ui->wd_label_forecast_weather->setText("Weather type:   " + weatherType);
         ui->wd_label_forecast_windspeed->setText("Windspeed m/s:   " +forecastVector.at(m_forecastHour).second.at(4));
@@ -200,7 +233,6 @@ void WeatherDialog::setForecastValues()
 
         m_forecastHour == 0 ? ui->wd_pb_forecast_previoushour->setDisabled(true) : ui->wd_pb_forecast_previoushour->setEnabled(true);
         m_forecastHour == 35 ? ui->wd_pb_forecast_nexthour->setDisabled(true) : ui->wd_pb_forecast_nexthour->setEnabled(true);
-
     }
     else
     {
@@ -219,20 +251,29 @@ void WeatherDialog::on_wd_pb_curWeather_clicked()
 /// Shows hourly forecast
 void WeatherDialog::on_wd_pb_forecast_clicked()
 {
-    ///change to page 2
-    ui->stackedwidget_wd->setCurrentIndex(1);
-
-    m_weatherCaller = new WeatherDataCaller(nullptr,1);
-    connect(m_weatherCaller, SIGNAL(forecastFinished()), this, SLOT(setForecastValues()));
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-
-void WeatherDialog::on_wd_pb_change_clicked()
-{
-    if(!ui->wd_le_newLocation->text().isEmpty())
+    if(ui->wd_le_newLocation->text().isEmpty() && g_userLocation == "locationPlaceHolder")
     {
-        m_location = ui->wd_le_newLocation->text();
+        QMessageBox msgBox;
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.setText("You don't have default location selected, so please type wanted location on field below");
+        msgBox.exec();
+    }
+    else /// we have some location
+    {
+        ///change to page 2
+        ui->stackedwidget_wd->setCurrentIndex(1);
+
+        ///if we have empty location lineedit
+        if(g_userLocation != "locationPlaceHolder" && ui->wd_le_newLocation->text().isEmpty())
+        {
+            m_weatherCaller = new WeatherDataCaller(nullptr,1,g_userLocation);
+        }
+        else if(g_userLocation != "locationPlaceHolder")/// line edit has data
+        {           
+            m_weatherCaller = new WeatherDataCaller(nullptr,1,ui->wd_le_newLocation->text());
+        }
+
+        connect(m_weatherCaller, SIGNAL(forecastFinished()), this, SLOT(setForecastValues()));
     }
 }
 
@@ -265,4 +306,11 @@ void WeatherDialog::on_wd_pb_forecast_nexthour_clicked()
     //add to hours and reset UI
     m_forecastHour += 1;
     setForecastValues();
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+void WeatherDialog::on_wd_pb_forecast_back_clicked()
+{
+    ui->stackedwidget_wd->setCurrentIndex(0);
 }

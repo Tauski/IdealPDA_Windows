@@ -5,3 +5,4 @@
 
 QString g_username = "namePlaceholder";
 QString g_userEmail = "emailPlaceHolder";
+QString g_userLocation = "locationPlaceHolder";

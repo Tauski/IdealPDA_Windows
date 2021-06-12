@@ -3,12 +3,15 @@
 
 
 CredentialsGateway::CredentialsGateway(QObject *parent)
-    : QObject(parent)
-    , m_credentialsStatus(false)
+    : QObject(parent),
+    m_credentialsStatus(false),
+    m_username("")
 {
     m_manager = new QNetworkAccessManager(this);
     connect(m_manager, &QNetworkAccessManager::finished, this, &CredentialsGateway::fileDownloaded);
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 CredentialsGateway::~CredentialsGateway()
 {
@@ -27,14 +30,12 @@ void CredentialsGateway::checkCredentials(QString ccName, QString ccPassword)
     m_manager->post(request,params.query().toUtf8());
 
     //modifying global username from programSettings
-    g_username = ccName;
-
-    getEmail(g_username);
+    m_username = ccName;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-void CredentialsGateway::registerUser(QString rName, QString rPassword, QString rEmail)
+void CredentialsGateway::registerUserDatabase(QString rName, QString rPassword, QString rEmail)
 {
     QUrl registerUrl(m_insertUrl);
     QUrlQuery params;
@@ -49,7 +50,7 @@ void CredentialsGateway::registerUser(QString rName, QString rPassword, QString 
 
 void CredentialsGateway::findUserByEmail(QString fuEmail)
 {
-    qDebug() << fuEmail;
+    qDebug() << "TODO";
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -59,7 +60,9 @@ bool CredentialsGateway::getCredentialsStatus()
     return m_credentialsStatus;
 }
 
-void CredentialsGateway::getEmail(QString name)
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+void CredentialsGateway::getEmailDatabase(QString name)
 {
     QUrl getEmailUrl(m_getEmailUrl);
     QUrlQuery params;
@@ -70,30 +73,57 @@ void CredentialsGateway::getEmail(QString name)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
+void CredentialsGateway::getLocationDatabase(QString username)
+{
+    QUrl getLocationUrl(m_getLocationUrl);
+    QUrlQuery params;
+    params.addQueryItem("f_name",username);
+    QNetworkRequest request(getLocationUrl);
+    m_manager->post(request,params.query().toUtf8());
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
 void CredentialsGateway::fileDownloaded(QNetworkReply* pReply)
 {
+
     QByteArray replyArray = pReply->readAll();
     QString replyString = replyArray;
 
-    //if reply string contains @ sign it should be email address
-    if(replyString.contains("@"))
+    qDebug() << replyString;
+
+    ///if reply string contains ID, it's good
+    if(replyString == "credentialsID")
     {
-        g_userEmail = replyString;
-    }
-    else if(replyString == "Data Matched")
-    {
+        ///setup globals with approved credentials
+        g_username = m_username;
+        getEmailDatabase(g_username);
+        getLocationDatabase(g_username);
         m_credentialsStatus = true;
         emit requestDone();
-    }   
-    else if(replyString == "user created successfully")
+    }
+    else if(replyString == "registerID")
     {
+        ///register approved emit signal for logindialog
         emit registerDone();
     }
-    else
+    else if(replyString.contains("emailID"))
     {
+        ///add users email to global variables
+        g_userEmail = replyString.remove(" emailID");
+    }
+    else if(replyString.contains("locationID"))
+    {
+        ///add users location to global variables
+        g_userLocation = replyString.remove(" locationID");
+    }
+    /// Open messagebox when error in replystring
+    else if(replyString.contains("ERROR:"))
+    {
+
         QMessageBox msgBox;
         msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setText("Couldn't connect to database");
+        msgBox.setText(replyString);
         msgBox.exec();
     }
 

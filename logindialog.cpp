@@ -9,9 +9,11 @@ LoginDialog::LoginDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0);
-    connect(&m_gateway,SIGNAL(requestDone()),this,SLOT(loginDone()));
-    connect(&m_gateway,SIGNAL(registerDone()),this, SLOT(registerDone()));
+    connect(&m_gateway,SIGNAL(requestDone()),this,SLOT(loginAccepted()));
+    connect(&m_gateway,SIGNAL(registerDone()),this, SLOT(registerAccepted()));
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 LoginDialog::~LoginDialog()
 {
@@ -20,7 +22,7 @@ LoginDialog::~LoginDialog()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-void LoginDialog::loginDone()
+void LoginDialog::loginAccepted()
 {
     qDebug() << "login done";
 
@@ -29,7 +31,7 @@ void LoginDialog::loginDone()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-void LoginDialog::registerDone()
+void LoginDialog::registerAccepted()
 {
     qDebug() << "register done";
     ui->stackedWidget->setCurrentIndex(0);
@@ -56,7 +58,7 @@ void LoginDialog::on_pb_diaReg_clicked()
     }
     else
     {
-        m_gateway.registerUser(ui->le_diaRegUsername->text(),ui->le_diaRegPassword->text(),ui->le_diaRegEmail->text());
+        m_gateway.registerUserDatabase(ui->le_diaRegUsername->text(),ui->le_diaRegPassword->text(),ui->le_diaRegEmail->text());
     }
 }
 

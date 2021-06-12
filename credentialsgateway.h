@@ -26,7 +26,7 @@ public:
     void checkCredentials(QString ccName, QString ccPassword);
 
     ///Registers new user with given parameters
-    void registerUser(QString rName, QString rPassword, QString rEmail);
+    void registerUserDatabase(QString rName, QString rPassword, QString rEmail);
 
     ///Searches given user by email
     void findUserByEmail(QString fuEmail);
@@ -35,7 +35,10 @@ public:
     bool getCredentialsStatus();
 
     ///Retrieves users email address from database.
-    void getEmail(QString name);
+    void getEmailDatabase(QString name);
+
+    ///Retrieves users location from database
+    void getLocationDatabase(QString location);
 
 signals:
 
@@ -56,8 +59,11 @@ private:
     ///Url to use when retrieving users email address from database.
     const QString m_getEmailUrl = "http://192.168.1.103:8012/project/Credentials/userGetEmail.php";
 
+    ///Url to use when retrieving users location from database.
+    const QString m_getLocationUrl = "http://192.168.1.103:8012/project/Credentials/userGetLocation.php";
+
     ///Url to use when deleting user from database WIP.
-    //const QString m_deleteUserUrl;
+    //const QString m_deleteUserUrl;   
 
     ///Object of networkaccessmanager
     QNetworkAccessManager *m_manager;
@@ -65,6 +71,8 @@ private:
     ///Flag if credentials are usable
     bool m_credentialsStatus;
 
+    ///Hold username before credentials are confirmed
+    QString m_username;
 };
 
 #endif // CREDENTIALSGATEWAY_H

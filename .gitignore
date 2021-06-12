@@ -25,3 +25,17 @@ deepclass/deeperclass.h
 deepclass/deeperclass.cpp
 deepclass/deepclass.h
 deepclass/deepclass.cpp
+debug/moc_calendareventdialog.cpp
+debug/moc_calendardialog.cpp
+debug/moc_credentialsgateway.cpp
+debug/moc_logindialog.cpp
+debug/moc_mainwindow.cpp
+debug/moc_notedialog.cpp
+debug/moc_notelistdialog.cpp
+debug/moc_predefs.h
+debug/moc_profiledialog.cpp
+debug/moc_weatherdatacaller.cpp
+debug/moc_weatherdialog.cpp
+ui_weatherdialog.h
+IdealPDA_Windows.pro.user
+IdealPDA_Windows.pro.user

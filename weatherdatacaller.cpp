@@ -1,14 +1,31 @@
 #include "weatherdatacaller.h"
 
-WeatherDataCaller::WeatherDataCaller(QObject *parent, int typeID)
+WeatherDataCaller::WeatherDataCaller(QObject *parent, int typeID, QString location)
     : QObject(parent),
-      m_typeID(typeID)
+      m_typeID(typeID),
+      m_location(location)
 {
     //Manager ---------------------------------------------------------------------------------------------------------
     m_webCtrl = new QNetworkAccessManager();
     connect(m_webCtrl, SIGNAL(finished(QNetworkReply*)), this, SLOT(fileDownloaded(QNetworkReply*)));
 
     //Request ---------------------------------------------------------------------------------------------------------
+    updateRequest(m_location);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+WeatherDataCaller::~WeatherDataCaller()
+{
+    qDebug()<<"wdc destructor";
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void WeatherDataCaller::updateRequest(QString newRequest)
+{
+    qDebug() << "update request for: " + newRequest;
+
     QString urlStartTime;
     QString urlEndTime;
 
@@ -23,12 +40,16 @@ WeatherDataCaller::WeatherDataCaller(QObject *parent, int typeID)
         qCritical() << "Error! couldn't retrieve current time";
     }
 
-    qDebug()<<"got time";
+    QString newLocation = newRequest;
+
+    qDebug() << "update request 2";
 
     if(m_typeID == 0) ///we wanted current weather data
     {
+        qDebug() << "update request 3: newtime: " + urlStartTime+ ", oldTIme: " + urlEndTime + ", location: " + newLocation;
+
         QUrl weatherUrl("http://opendata.fmi.fi/wfs/fin");
-        weatherUrl.setQuery("?service=WFS&version=2.0.0&request=GetFeature&storedquery_id=fmi::observations::weather::simple&fmisid=101799&fmisid=101794&fmisid=101786&parameters=ws,temperature,pressure&starttime=" + urlStartTime + "&endtime=" + urlEndTime + "&timestep=1&");
+        weatherUrl.setQuery("?service=WFS&version=2.0.0&request=GetFeature&storedquery_id=fmi::observations::weather::simple&place="+newLocation+"&parameters=ws,temperature,pressure&starttime=" + urlStartTime + "&endtime=" + urlEndTime + "&timestep=1&");
         QNetworkRequest request(weatherUrl);
         qDebug()<<"created requeset with url:" << weatherUrl;
         m_webCtrl->get(request);
@@ -36,23 +57,16 @@ WeatherDataCaller::WeatherDataCaller(QObject *parent, int typeID)
     }
     else /// we wanted weather forecast
     {
+        qDebug() << "update request 4";
+
         QUrl weatherUrl("http://opendata.fmi.fi/wfs");
-        weatherUrl.setQuery("?service=WFS&version=2.0.0&request=getFeature&storedquery_id=fmi::forecast::hirlam::surface::point::multipointcoverage&place=otanmäki&");
+        weatherUrl.setQuery("?service=WFS&version=2.0.0&request=getFeature&storedquery_id=fmi::forecast::hirlam::surface::point::multipointcoverage&place="+newLocation+"&");
         QNetworkRequest request(weatherUrl);
         qDebug()<<"created requeset with url:" << weatherUrl;
         m_webCtrl->get(request);
         qDebug()<<"get Request forecast";
     }
 }
-
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-WeatherDataCaller::~WeatherDataCaller()
-{
-    qDebug()<<"wdc destructor";
-}
-
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -162,7 +176,7 @@ void WeatherDataCaller::solveData(QByteArray resultArray)
             //Elements with ParameterValue holds the numerical data
             if(m_XMLreader.name() == "ParameterValue")
             {
-                xmlVector.push_back(m_XMLreader.readElementText());
+                xmlVector.push_back(m_XMLreader.readElementText());                
             }
             else if(m_XMLreader.name() == "positions") // gets time and positions
             {
@@ -196,27 +210,15 @@ void WeatherDataCaller::solveData(QByteArray resultArray)
         //handle data from different stations
         if(!xmlVector.empty() && valueList.empty())
         {
+            qDebug()<< xmlVector;
             //iterate every other element to only include numeric values
             QPair<QString, QString> station_valuePair;
             for(int i = 0; i < xmlVector.size(); i++)
             {
-                    if(i < 3)
-                    {
-                        station_valuePair.first = "Oulu Oulunsalo Station";
-                        station_valuePair.second = xmlVector.at(i);
-                        allValues.push_back(station_valuePair);
-                    }
-                    else if(i > 2 && i < 6)
-                    {
-                        station_valuePair.first = "Oulu Vihreäsaari Station";
-                        station_valuePair.second = xmlVector.at(i);
-                        allValues.push_back(station_valuePair);
-                    }
-                    else{
-                        station_valuePair.first = "Oulu airport Station";
-                        station_valuePair.second = xmlVector.at(i);
-                        allValues.push_back(station_valuePair);
-                    }
+                qDebug() << i;
+                station_valuePair.first = m_location;
+                station_valuePair.second = xmlVector.at(i);
+                allValues.push_back(station_valuePair);
             }
         }
         else if(!timeList.empty())
@@ -244,8 +246,6 @@ void WeatherDataCaller::solveData(QByteArray resultArray)
         }
     }
 
-    qDebug()<< m_forecastVector.at(35);
-
     ///if we want weather we need to find highest
     if(m_typeID == 0)
     {
@@ -257,6 +257,10 @@ void WeatherDataCaller::solveData(QByteArray resultArray)
 
 void WeatherDataCaller::findHighest(QVector<QPair<QString, QString>> *compVector)
 {
+    ///when multiple stations
+
+    qDebug() << *compVector;
+
     QVector<double> wsVec = {0};
     QString wsStation = "";
     QVector<double> tempVec = {0};
@@ -267,59 +271,71 @@ void WeatherDataCaller::findHighest(QVector<QPair<QString, QString>> *compVector
     //Check number of stations that has data
     int size = compVector->size();
 
-    //highest ws
-    for(int i = 0; i < compVector->size(); i += 3)
+    if(size > 1)
     {
-        wsVec.push_back(compVector->at(i).second.toDouble());
-    }
-
-    double max_ws = *std::max_element(wsVec.begin(),wsVec.end());
-
-    for(int i = 0; i < compVector->size(); i += 3)
-    {
-        if(compVector->at(i).second.toDouble() == max_ws)
+        //highest ws
+        for(int i = 0; i < compVector->size(); i += 3)
         {
-            wsStation = compVector->at(i).first;
+            wsVec.push_back(compVector->at(i).second.toDouble());
         }
-    }
 
-    //highest temp
-    for(int i = 1; i < compVector->size(); i += 3)
-    {
-        tempVec.push_back(compVector->at(i).second.toDouble());
-    }
+        double max_ws = *std::max_element(wsVec.begin(),wsVec.end());
 
-    double max_temp = *std::max_element(tempVec.begin(),tempVec.end());
-
-    for(int i = 1; i < compVector->size(); i += 3)
-    {
-        if(compVector->at(i).second.toDouble() == max_temp)
+        for(int i = 0; i < compVector->size(); i += 3)
         {
-            tempStation = compVector->at(i).first;
+            if(compVector->at(i).second.toDouble() == max_ws)
+            {
+                wsStation = compVector->at(i).first;
+            }
         }
-    }
 
-    //highest airpressure
-    for(int i = 2; i < compVector->size(); i += 3)
-    {
-        apVec.push_back(compVector->at(i).second.toDouble());
-    }
-
-    double max_ap = *std::max_element(apVec.begin(),apVec.end());
-
-    for(int i = 2; i < compVector->size(); i += 3)
-    {
-        if(compVector->at(i).second.toDouble() == max_ap)
+        //highest temp
+        for(int i = 1; i < compVector->size(); i += 3)
         {
-            apStation = compVector->at(i).first;
+            tempVec.push_back(compVector->at(i).second.toDouble());
         }
+
+        double max_temp = *std::max_element(tempVec.begin(),tempVec.end());
+
+        for(int i = 1; i < compVector->size(); i += 3)
+        {
+            if(compVector->at(i).second.toDouble() == max_temp)
+            {
+                tempStation = compVector->at(i).first;
+            }
+        }
+
+        //highest airpressure
+        for(int i = 2; i < compVector->size(); i += 3)
+        {
+            apVec.push_back(compVector->at(i).second.toDouble());
+        }
+
+        double max_ap = *std::max_element(apVec.begin(),apVec.end());
+
+        for(int i = 2; i < compVector->size(); i += 3)
+        {
+            if(compVector->at(i).second.toDouble() == max_ap)
+            {
+                apStation = compVector->at(i).first;
+            }
+        }
+
+        m_highestVector.push_back(QPair<QString,QString>(wsStation,QString::number(max_ws)));
+        m_highestVector.push_back(QPair<QString,QString>(tempStation,QString::number(max_temp)));
+        m_highestVector.push_back(QPair<QString,QString>(apStation,QString::number(max_ap)));
+        m_highestVector.push_back(QPair<QString,QString>(QString::number(size/3),QString::number(size/3)));
+        emit weatherFinished();
+    }
+    else if(size == 1)
+    {
+        qDebug() << "was only 1";
+        m_highestVector = *compVector;
     }
 
-    m_highestVector.push_back(QPair<QString,QString>(wsStation,QString::number(max_ws)));
-    m_highestVector.push_back(QPair<QString,QString>(tempStation,QString::number(max_temp)));
-    m_highestVector.push_back(QPair<QString,QString>(apStation,QString::number(max_ap)));
-    m_highestVector.push_back(QPair<QString,QString>(QString::number(size/3),QString::number(size/3)));
-    emit weatherFinished();
+    ///when single station
+
+
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -334,4 +350,14 @@ QVector<QPair<QString,QString>> WeatherDataCaller::getWeatherData() const
 QVector<QPair<QString,QVector<QString>>> WeatherDataCaller::getWeatherForecast() const
 {
     return m_forecastVector;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void WeatherDataCaller::setNewLocation(QString newLocation)
+{
+    ///maybe check validity of newLocation as FMI approved multipoint position
+    /// Need to figure out where can I get the list of usable place names
+    updateRequest(newLocation);
+
 }

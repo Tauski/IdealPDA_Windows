@@ -21,17 +21,20 @@ class WeatherDataCaller : public QObject
 
 public:
 
-    WeatherDataCaller(QObject *parent = nullptr, int typeID = 0);
+    WeatherDataCaller(QObject *parent = nullptr, int typeID = 0, QString location = "");
     ~WeatherDataCaller();
 
     ///Create new update request for manager
-    void updateRequest();
+    void updateRequest(QString newRequest);
 
     ///Return weather data (usually to weatherDialog)
     QVector<QPair<QString,QString>> getWeatherData() const;
 
     ///Return forecast data (usually to weatherDialog)
     QVector<QPair<QString,QVector<QString>>> getWeatherForecast() const;
+
+    ///Sets new location for current weather and forecast calls
+    void setNewLocation(QString newLocation);
 
 signals:
 
@@ -74,6 +77,9 @@ private:
 
     ///Type of wichh request we wanted 0 = weather, 1 = forecast
     const int m_typeID;
+
+    ///Location to search weather data from
+    const QString m_location;
 
 };
 
