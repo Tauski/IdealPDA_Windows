@@ -10,7 +10,6 @@ namespace Ui {
 class WeatherDialog;
 }
 
-
 /**
     \brief Dialog
 */

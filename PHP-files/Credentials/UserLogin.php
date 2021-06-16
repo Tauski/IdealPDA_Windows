@@ -15,14 +15,14 @@
  
  if(isset($check)){
  
- echo "Data Matched";
+ echo 'credentialsID';
  }
  else{
- echo "Invalid Username or Password Please Try Again";
+ echo "ERROR: Invalid Username or Password Please Try Again";
  }
  
  }else{
- echo "Check Again";
+ echo "ERROR: Check Again";
  }
 
 

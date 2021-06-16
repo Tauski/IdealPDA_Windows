@@ -7,15 +7,14 @@
  $con = mysqli_connect($HostName,$User,$Password,$dbName,$Port);
  
  $FL_NAME = $_POST['f_name'];
- $EDATE = $_POST['date'];
+ $E_EVENT = $_POST['event'];
 
- $Sql_Query = "SELECT event, dateofevent, timeofevent, location, description FROM userevents WHERE user = '$FL_NAME' AND dateofevent = '$EDATE'";
-
-$calendarID = 'allEventID'; 
+ $Sql_Query = "SELECT event, dateofevent, timeofevent, location, description FROM userevents WHERE user = '$FL_NAME' AND event = '$E_EVENT'";
+ 
+$calendarID = 'eventID'; 
 $result = array();
 $result['data'] = array();
 $response = mysqli_query($con,$Sql_Query);
-
 
 while($row = mysqli_fetch_array($response))
 {

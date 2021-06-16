@@ -49,27 +49,23 @@ void NoteListDialog::onRequestFinished()
 
 void NoteListDialog::noteClicked()
 {
-
-    //this->hide(); //TODO figure out why this doesn't work
     QString noteConstructorString;
-
     QPushButton *button = (QPushButton *)sender();
 
     qDebug() << button->text() << " was note header";
     for(int i = 0; i < m_noteVector.size(); i++)
     {
-        //If note contains dedicated header string we need to get whole string for noteDialog
+        ///If note contains dedicated header string we need to get whole string for noteDialog
         if(m_noteVector.at(i).first != "")
         {
             noteConstructorString = m_noteVector.at(i).first + "H:" + m_noteVector.at(i).second;
         }
-        else //We can just send the button text
+        else ///We can just send the button text
         {
             noteConstructorString = button->text();
         }
     }
-
-    //create new noteDialog with existing note
+    ///create new noteDialog with existing note
     qDebug() << "note constructor string = " << noteConstructorString;
 
     NoteDialog newNote(this, noteConstructorString);
@@ -77,7 +73,6 @@ void NoteListDialog::noteClicked()
     {
            qDebug() << "noteDialog accepted from list";
            this->accept();
-           //this->show(); //TODO figure out why this doesn't work
     }
 }
 

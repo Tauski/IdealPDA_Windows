@@ -11,6 +11,9 @@ namespace Ui {
 class CalendarDialog;
 }
 
+/**
+    \brief Calendar dialog to create events and keep time/dates
+*/
 class CalendarDialog : public QDialog
 {
     Q_OBJECT
@@ -21,20 +24,19 @@ public:
 
 public slots:
 
-    ///Slot that listens Networkmanagers calendarOk signal
+    ///Slot that listens NetworkGateways calendarOk signal
     void gotEvents();
 
 private slots:
 
-    ///CalendarPushButton clicked,
+    ///Date on calendar clicked
     void calendarButtonClicked();
 
-    ///Add new event for the given date
+    ///Add new event for the selected date
     void on_cd_pb_addEvents_clicked();
 
     ///Open event dialog with given event
     void eventClicked();
-
 
 private:
 
@@ -51,9 +53,6 @@ private:
 
     ///Holds currently selected date from calendar
     QDate m_selectedDate;
-
-    ///String to use when getting all notes
-    const QString m_getEventsUrl = "http://192.168.1.103:8012/project/Calendar/userEventsGetNew.php";
 };
 
 #endif // CALENDARDIALOG_H

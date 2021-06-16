@@ -10,6 +10,11 @@ namespace Ui {
 class CalendarEventDialog;
 }
 
+
+/**
+    \brief Used to create new event with required data, or opened with existing data when
+    previously created event was clicked in event list in CalendaDialog
+*/
 class CalendarEventDialog : public QDialog
 {
     Q_OBJECT
@@ -26,7 +31,7 @@ public slots:
     ///New event sent to database successfully
     void eventSent();
 
-    ///Populate dialog text fields with data from database
+    ///Set dialog text fields with data from database
     void eventGot();
 
     ///Old event deleted from database successfully
@@ -37,10 +42,13 @@ public slots:
 
 private slots:
 
+    ///Save clicked so generate gateway post and send it to api
     void on_ced_pb_saveEvent_clicked();
 
+    ///Update clicked so generate updated post and send it to api
     void on_ced_pb_updateEvent_clicked();
 
+    ///Delete clicked so Generate delete post and send it to api
     void on_ced_pb_deleteEvent_clicked();
 
 private:

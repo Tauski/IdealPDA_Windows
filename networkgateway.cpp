@@ -23,6 +23,8 @@ NetworkGateway::NetworkGateway(QObject *parent, int type)
 
 void NetworkGateway::sendCredentialsPost(QVector<QString> post)
 {
+    ///Generate query approved requests for api according to post send from credentials handling class
+
     qDebug() << "post type :" << post.at(0);
 
     if(post.size() == 0)
@@ -85,6 +87,8 @@ void NetworkGateway::sendCredentialsPost(QVector<QString> post)
 
 void NetworkGateway::credentialsReply(QNetworkReply *creReply)
 {
+    ///Handling reply from api
+
     QByteArray array = creReply->readAll();
     QString reply = array;
     qDebug() << "Credentials : " << reply;
@@ -137,6 +141,10 @@ void NetworkGateway::credentialsReply(QNetworkReply *creReply)
 
 void NetworkGateway::sendCalendarPost(QVector<QString> post)
 {
+    ///Generate query approved requests for api according to post send from calendar handling class
+
+    qDebug() << "post type :" << post.at(0);
+
     if(post.size() == 0)
     {
         QMessageBox msgBox;
@@ -197,6 +205,8 @@ void NetworkGateway::sendCalendarPost(QVector<QString> post)
 
 void NetworkGateway::calendarReply(QNetworkReply *calReply)
 {
+    ///Handling reply from api
+
     QByteArray array = calReply->readAll();
     QString reply = array;
     QVector<QString> eventArray;
@@ -332,6 +342,9 @@ void NetworkGateway::calendarReply(QNetworkReply *calReply)
 
 void NetworkGateway::sendNotePost(QVector<QString> nPost)
 {
+    ///Generate query approved requests for api according to post send from note handling class
+
+    qDebug() << "post type :" << nPost.at(0);
 
     if(nPost.size() == 0)
     {
@@ -379,6 +392,7 @@ void NetworkGateway::sendNotePost(QVector<QString> nPost)
 
 void NetworkGateway::noteReply(QNetworkReply *nReply)
 {    
+    ///Handling reply from api
 
     QByteArray replyArray = nReply->readAll();
     QString reply = replyArray;

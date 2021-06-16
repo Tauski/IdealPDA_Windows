@@ -27,22 +27,23 @@ public:
 
     explicit NetworkGateway(QObject *parent = nullptr, int type = 0);
 
-    ///Credentials
+    ///Credentials post creation and reply handling
     void sendCredentialsPost(QVector<QString> crPost);
     QString getCredentialsReply(){return m_credentialsReply;}
 
-    ///Calendar
+    ///Calendar post creation and reply handling
     void sendCalendarPost(QVector<QString> cPost);
     QVector<QString> getCalendarReply(){return m_calendarReply;}
     QString getEventReply() {return m_eventReply;};
 
-    ///Notes
+    ///Notes post creation and reply handling
     void sendNotePost(QVector<QString> nPost);
     QString getNoteReply() {return m_noteReply;};
     QVector<QPair<QString,QString>> getNoteListReply() {return m_noteListReply;}
 
 public slots:
 
+    ///QNetworkManagers replies slots
     void credentialsReply(QNetworkReply *creReply);
     void calendarReply(QNetworkReply *calReply);
     void noteReply(QNetworkReply * nReply);
@@ -64,26 +65,26 @@ signals:
 private:
 
     ///Credentials
-    ///Url to use when inserting data to credentials (mostly register usage).
+    ///insert data to credentials (mostly register usage).
     const QString m_insertUrl = "http://192.168.1.103:8012/project/Credentials/insert.php";
 
-    ///Url to use when checking credentials during login.
+    ///check credentials during login.
     const QString m_loginUrl = "http://192.168.1.103:8012/project/Credentials/UserLogin.php";
 
-    ///Url to use when retrieving users email address from database.
+    ///retrieve users email address from database.
     const QString m_getEmailUrl = "http://192.168.1.103:8012/project/Credentials/userGetEmail.php";
 
-    ///Url to use when retrieving users location from database.
+    ///retrieve users default location from database.
     const QString m_getLocationUrl = "http://192.168.1.103:8012/project/Credentials/userGetLocation.php";
 
-    ///Url to use when inserting data to credentials (mostly register usage).
+    ///insert data to credentials (mostly register usage).
     const QString m_deleteUrl = "http://192.168.1.103:8012/project/Credentials/userDelete.php";
 
-    ///Url to use when updatigng users credentials
+    ///updatigng users credentials
     const QString m_updateUrl = "http://192.168.1.103:8012/project/Credentials/userCredentialsChange.php";
 
     ///Calendar
-    ///String to use when getting all events
+    ///get all events
     const QString m_getEventsUrl = "http://192.168.1.103:8012/project/Calendar/userEventsGetNew.php";
 
     ///Add event to database

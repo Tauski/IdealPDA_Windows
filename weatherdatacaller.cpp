@@ -39,11 +39,7 @@ void WeatherDataCaller::updateRequest(QString newRequest)
     {
         qCritical() << "Error! couldn't retrieve current time";
     }
-
     QString newLocation = newRequest;
-
-    qDebug() << "update request 2";
-
     if(m_typeID == 0) ///we wanted current weather data
     {
         qDebug() << "update request 3: newtime: " + urlStartTime+ ", oldTIme: " + urlEndTime + ", location: " + newLocation;
@@ -57,8 +53,6 @@ void WeatherDataCaller::updateRequest(QString newRequest)
     }
     else /// we wanted weather forecast
     {
-        qDebug() << "update request 4";
-
         QUrl weatherUrl("http://opendata.fmi.fi/wfs");
         weatherUrl.setQuery("?service=WFS&version=2.0.0&request=getFeature&storedquery_id=fmi::forecast::hirlam::surface::point::multipointcoverage&place="+newLocation+"&");
         QNetworkRequest request(weatherUrl);
@@ -88,16 +82,16 @@ QVector<QString> WeatherDataCaller::getTimes()
 
     QDateTime dateTime;
 
-    //Get datetime in ISO format that the url also uses,
-    //StartTime and endTime can be the same in the url, this will only give one set of parameters regardless of the timestep.
+    ///Get datetime in ISO format that the url also uses,
+    ///StartTime and endTime can be the same in the url, this will only give one set of parameters regardless of the timestep.
     QString startTime = dateTime.currentDateTimeUtc().toString(Qt::ISODate);
     QString endTime = dateTime.currentDateTimeUtc().toString(Qt::ISODate);
 
-    //check if min is divisible by 10, becouse url can only target 10 min intervals
+    ///check if min is divisible by 10, becouse url can only target 10 min intervals
     int min = dateTime.currentDateTimeUtc().time().minute();
     if(min % 10 == 0)
     {
-        //current time is mostly usable, replace seconds, becouse if not 00 and using the same startTime/endtime calling the feature doesn't seem to work
+        ///current time is mostly usable, replace seconds, becouse if not 00 and using the same startTime/endtime calling the feature doesn't seem to work
         startTime.replace(17,2,QString::number(0));
         returnVector.push_back(startTime);
 
@@ -160,30 +154,30 @@ void WeatherDataCaller::solveData(QByteArray resultArray)
     QVector<QString> xmlVector;
     QVector<QPair<QString,QString>> allValues;
 
-    //Searching for tokens that give name and value from whole file
+    ///Searching for tokens that give name and value from whole file
     while(!m_XMLreader.atEnd() && !m_XMLreader.hasError())
     {
         QXmlStreamReader::TokenType token = m_XMLreader.readNext();
 
-        //If token is startDocument go to next
+        ///If token is startDocument go to next
         if(token == QXmlStreamReader::StartDocument)
         {
             continue;
         }
-        //If token is StartElement - read it
+        ///If token is StartElement - read it
         if(token == QXmlStreamReader::StartElement)
         {
-            //Elements with ParameterValue holds the numerical data
+            ///Elements with ParameterValue holds the numerical data
             if(m_XMLreader.name() == "ParameterValue")
             {
                 xmlVector.push_back(m_XMLreader.readElementText());                
             }
-            else if(m_XMLreader.name() == "positions") // gets time and positions
+            else if(m_XMLreader.name() == "positions") /// gets time and positions
             {
                 xmlVector.push_back(m_XMLreader.readElementText());
                 timeList = xmlVector.at(0).split(" ");
 
-                //Split from xml vector causes some unnecessary characters so remove them
+                ///Split from xml vector causes some unnecessary characters so remove them
                 timeList.removeAll("\n");
                 timeList.removeAll("");
                 xmlVector.clear();
@@ -193,7 +187,7 @@ void WeatherDataCaller::solveData(QByteArray resultArray)
                 xmlVector.push_back(m_XMLreader.readElementText());
                 valueList = xmlVector.at(0).split(" ");
 
-                //Split from xml vector causes some unnecessary characters so remove them
+                ///Split from xml vector causes some unnecessary characters so remove them
                 valueList.removeAll("\n");
                 valueList.removeAll("");
                 xmlVector.clear();
@@ -207,11 +201,11 @@ void WeatherDataCaller::solveData(QByteArray resultArray)
     }
     else
     {
-        //handle data from different stations
+        ///handle data from different stations
         if(!xmlVector.empty() && valueList.empty())
         {
             qDebug()<< xmlVector;
-            //iterate every other element to only include numeric values
+            ///iterate every other element to only include numeric values
             QPair<QString, QString> station_valuePair;
             for(int i = 0; i < xmlVector.size(); i++)
             {
@@ -268,12 +262,12 @@ void WeatherDataCaller::findHighest(QVector<QPair<QString, QString>> *compVector
     QVector<double> apVec = {0};
     QString apStation = "";
 
-    //Check number of stations that has data
+    ///Check number of stations that has data
     int size = compVector->size();
 
     if(size > 1)
     {
-        //highest ws
+        ///highest ws
         for(int i = 0; i < compVector->size(); i += 3)
         {
             wsVec.push_back(compVector->at(i).second.toDouble());
@@ -289,7 +283,7 @@ void WeatherDataCaller::findHighest(QVector<QPair<QString, QString>> *compVector
             }
         }
 
-        //highest temp
+        ///highest temp
         for(int i = 1; i < compVector->size(); i += 3)
         {
             tempVec.push_back(compVector->at(i).second.toDouble());
@@ -305,7 +299,7 @@ void WeatherDataCaller::findHighest(QVector<QPair<QString, QString>> *compVector
             }
         }
 
-        //highest airpressure
+        ///highest airpressure
         for(int i = 2; i < compVector->size(); i += 3)
         {
             apVec.push_back(compVector->at(i).second.toDouble());

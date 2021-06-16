@@ -89,13 +89,12 @@ void WeatherDialog::setLabelValues()
 
 void WeatherDialog::setForecastValues()
 {
-    //Get forecast data from caller and insert it into local vector
+    ///Get forecast data from caller and insert it into local vector
     QVector<QPair<QString,QVector<QString>>> forecastVector = m_weatherCaller->getWeatherForecast();
 
     QString weatherType = "";
     switch (forecastVector.at(m_forecastHour).second.at(6).split(".").first().toInt())
     {
-
     case 1:
         weatherType = "Clear";
     break;
@@ -203,10 +202,9 @@ void WeatherDialog::setForecastValues()
     case 92:
         weatherType = "Fog";
     break;
-
     }
 
-    //update UI
+    ///update UI
 
     QString locationString;
     if(ui->wd_le_newLocation->text().isEmpty())
@@ -281,29 +279,25 @@ void WeatherDialog::on_wd_pb_forecast_clicked()
 
 void WeatherDialog::on_wd_pb_forecast_previoushour_clicked()
 {
-
     if(!ui->wd_pb_forecast_nexthour->isEnabled())
     {
         ui->wd_pb_forecast_nexthour->setEnabled(true);
     }
 
-
     m_forecastHour -= 1;
     setForecastValues();
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 void WeatherDialog::on_wd_pb_forecast_nexthour_clicked()
 {
-    //If previous button is not enabled when we press next hour we enable this
+    ///If previous button is not enabled when we press next hour we enable this
     if(!ui->wd_pb_forecast_previoushour->isEnabled())
     {
         ui->wd_pb_forecast_previoushour->setEnabled(true);
     }
-
-    //add to hours and reset UI
+    ///add to hours and reset UI
     m_forecastHour += 1;
     setForecastValues();
 }

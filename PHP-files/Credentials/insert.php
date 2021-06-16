@@ -14,16 +14,16 @@ $ChechSQL = "SELECT * FROM users WHERE f_name='$FL_NAME'";
 $check = mysqli_fetch_array(mysqli_query($con,$ChechSQL));
 
 if(isset($check)){
-	echo 'Name is already taken';
+	echo 'ERROR: Name is already taken';
 }
 else{
 	$sql_query = "INSERT INTO users (f_name,email,password) values ('$FL_NAME','$EMAIL','$PASSWORD')";
 
 	if(mysqli_query($con,$sql_query)){
-		echo 'user created successfully';
+		echo 'registerID';
 	}
 	else{
-		echo 'something else went wrong';
+		echo 'ERROR: something went wrong when registering, try different name,email,password compination';
 	}
 }
 }

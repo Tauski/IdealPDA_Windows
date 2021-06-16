@@ -122,7 +122,6 @@ void ProfileDialog::updateConfirmed()
     if(!replyString.contains("ERROR")) //Error echoes only when something went wrong
     {
         this->accept();
-
         g_username = m_newUsername.isEmpty() ? g_username : m_newUsername;
         g_userEmail = m_newEmail.isEmpty() ? g_userEmail : m_newEmail;
         g_userLocation = m_newLocation.isEmpty() ? g_userLocation : m_newLocation;

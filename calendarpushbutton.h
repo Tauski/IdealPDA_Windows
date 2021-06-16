@@ -3,9 +3,13 @@
 
 #include <QPushButton>
 
+/**
+    \brief Custom pushbutton to use in calendar dialog to create pressable dates
+*/
 class CalendarPushButton : public QPushButton
 {
     Q_OBJECT
+
 public:
     explicit CalendarPushButton(const QString& text, QWidget* parent = nullptr);
 

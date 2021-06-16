@@ -16,7 +16,7 @@ echo $DATEOFEVENT;
 
 	$sql_query = "INSERT INTO userevents (user,event,dateofevent,timeofevent,location,description) values ('$FL_NAME','$EVENT','$DATEOFEVENT','$TIMEOFEVENT','$LOCATION','$DESCRIPTION')";
 	if(mysqli_query($con,$sql_query)){
-		#echo 'Event saved!';
+		echo 'Event Saved';
 	}
 	else{
 		echo 'something else went wrong';

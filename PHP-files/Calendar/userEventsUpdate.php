@@ -14,12 +14,12 @@
  $NEW_EDATE = $_POST['edate'];
  $NEW_ETIME = $_POST['etime'];
 
- $Sql_Query = "UPDATE usernotes SET event = '$NEW_ENAME', dateofevent = '$NEW_EDATE', timeofevent = '$NEW_ETIME', location = '$NEW_ELOCATION', description = '$NEW_EDESCRIPTION' WHERE user = '$FL_NAME' AND event = '$OLD_ENAME'";
+ $Sql_Query = "UPDATE userevents SET event = '$NEW_ENAME', dateofevent = '$NEW_EDATE', timeofevent = '$NEW_ETIME', location = '$NEW_ELOCATION', description = '$NEW_EDESCRIPTION' WHERE user = '$FL_NAME' AND event = '$OLD_ENAME'";
 
 if(mysqli_query($con,$Sql_Query)){
-	    echo "Note Updated";
+	    echo "Event Updated";
 } else {
-    echo "ERROR: Could not able to execute $sql. " . mysqli_error($link);
+    echo "ERROR: Could not update event" . $FL_NAME . $NEW_ENAME . $OLD_ENAME . $NEW_ELOCATION . $NEW_EDESCRIPTION . $NEW_EDATE . $NEW_ETIME;
 }
 
 }

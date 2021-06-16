@@ -30,7 +30,6 @@ CalendarDialog::~CalendarDialog()
 
 void CalendarDialog::insertCalendarButtons(long long int selectedDateTimeSinceEpoch)
 {
-
     /// set initial current date as systems current date
     QDateTime curDate;
     curDate.setSecsSinceEpoch(selectedDateTimeSinceEpoch);
@@ -55,7 +54,6 @@ void CalendarDialog::insertCalendarButtons(long long int selectedDateTimeSinceEp
         {
             ui->calendarButtonLayout->addWidget(button,1,firstDayOfMonthWeekDay ,Qt::AlignCenter);
         }
-
         ///SecondWeek
         if(i < 14 && i > 6 )
         {
@@ -76,7 +74,6 @@ void CalendarDialog::insertCalendarButtons(long long int selectedDateTimeSinceEp
         {
             ui->calendarButtonLayout->addWidget(button,5,firstDayOfMonthWeekDay ,Qt::AlignCenter);
         }
-
         ///connect every calendar button to single slot
         connect(button,SIGNAL(clicked()),this,SLOT(calendarButtonClicked()));
         firstDayOfMonthWeekDay++;
@@ -87,7 +84,7 @@ void CalendarDialog::insertCalendarButtons(long long int selectedDateTimeSinceEp
 
 void CalendarDialog::calendarButtonClicked()
 {
-    ///Enable previously set buttons if any
+    ///Enable previously disabled buttons if any
     for(int i = 0; i < ui->calendarButtonLayout->count(); i++)
     {
         QWidget *w = ui->calendarButtonLayout->itemAt(i)->widget();
@@ -144,8 +141,8 @@ void CalendarDialog::eventListPost()
 
 void CalendarDialog::gotEvents()
 {
+    ///Retrieve reply from gateway and populate event list if there's events
     QVector<QString> vector = m_gateway.getCalendarReply();
-
     for(int i = 0; i < vector.size();i++)
     {
         QPushButton *button = new QPushButton(vector.at(i),this);
@@ -182,7 +179,7 @@ void CalendarDialog::eventClicked()
     ///find out sender
     QPushButton *button = (QPushButton *)sender();
 
-    ///Open new eventDialog with given button
+    ///Open new eventDialog with given buttons text as date
     this->hide();
     CalendarEventDialog dialog(nullptr,button->text());
     dialog.setEventDate(m_selectedDate);

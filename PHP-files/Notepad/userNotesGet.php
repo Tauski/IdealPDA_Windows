@@ -10,11 +10,10 @@
  
  $Sql_Query = "SELECT note FROM usernotes WHERE user = '$FL_NAME'";
  
+$notesID = 'notesID';
 $result = array();
 $result['data'] = array();
 $response = mysqli_query($con,$Sql_Query);
-
-#incomplete as of yet, it only echoes the first element
 
 while($row = mysqli_fetch_array($response))
 {
@@ -22,6 +21,7 @@ while($row = mysqli_fetch_array($response))
 	{
 		$index['note'] = $row['0'];
 		array_push($result['data'], $index);
+		array_push($result['data'], $notesID);
 	}		
 }
 

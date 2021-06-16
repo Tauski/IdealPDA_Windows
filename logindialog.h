@@ -2,7 +2,6 @@
 #define LOGINDIALOG_H
 
 #include <QDialog>
-
 #include "networkgateway.h"
 
 namespace Ui {
@@ -36,7 +35,6 @@ public slots:
 
     ///Retrieves emitted signal from networkGateway when reply is done
     void credentialsAccepted();
-
 
 private:
 

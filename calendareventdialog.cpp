@@ -14,10 +14,15 @@ CalendarEventDialog::CalendarEventDialog(QWidget *parent,QString eventTitle) :
     }
     else
     {
+        ///disable/enable necessary stuff
         ui->ced_pb_saveEvent->setDisabled(true);
         ui->ced_pb_updateEvent->setEnabled(true);
         ui->ced_pb_deleteEvent->setEnabled(true);
+
+        ///Connections for getting event and updating event
         connect(&m_gateway, &NetworkGateway::calendarOk, this, &CalendarEventDialog::eventGot);
+        connect(&m_gateway, &NetworkGateway::calendarUpdated,this,&CalendarEventDialog::eventUpdated);
+
         ///Build event dialog if was opened from eventList
         getEventByTitle(m_eventTitle);
     }
@@ -49,12 +54,14 @@ void CalendarEventDialog::eventSent()
 
 void CalendarEventDialog::eventGot()
 {
+    ///Set text fields according to reply data
     QVector<QString> eventData = m_gateway.getCalendarReply();
     ui->ced_le_title->setText(eventData.at(0));
     ui->ced_dateTime_start->setTime(QTime::fromString(eventData.at(2)));
     ui->ced_le_location->setText(eventData.at(3));
     ui->ced_te_body->setText(eventData.at(4));
 
+    ///Hold old title incase update is needed
     m_oldTitle = eventData.at(0);
 }
 
@@ -62,8 +69,13 @@ void CalendarEventDialog::eventGot()
 
 void CalendarEventDialog::eventUpdated()
 {
+    ///get reply and generate msgbox
     QString reply = m_gateway.getEventReply();
-    qDebug() << reply;
+    QMessageBox msgBox;
+    msgBox.setIcon(QMessageBox::Warning);
+    msgBox.setText(reply);
+    msgBox.exec();
+
     this->accept();
 }
 
@@ -104,7 +116,7 @@ void CalendarEventDialog::on_ced_pb_saveEvent_clicked()
     }
     else
     {
-        ///generate gateway post
+        ///generate gateway post to save event into database
         QVector<QString> params;
         params.push_back("addEvent");
         params.push_back(g_username);
@@ -121,7 +133,7 @@ void CalendarEventDialog::on_ced_pb_saveEvent_clicked()
 
 void CalendarEventDialog::getEventByTitle(const QString title)
 {
-    ///generate gateway post
+    ///generate gateway post to get event by title
     QVector<QString>params;
     params.push_back("getEventByTitle");
     params.push_back(g_username);
@@ -133,7 +145,7 @@ void CalendarEventDialog::getEventByTitle(const QString title)
 
 void CalendarEventDialog::on_ced_pb_updateEvent_clicked()
 {
-    ///TODO:
+    ///generate gateway post to update event
     QVector<QString>params;
     params.push_back("updateEvent");
     params.push_back(g_username);
@@ -144,8 +156,6 @@ void CalendarEventDialog::on_ced_pb_updateEvent_clicked()
     params.push_back(m_date.toString(Qt::ISODate));
     params.push_back(ui->ced_dateTime_start->time().toString("hh:mm:ss"));
     m_gateway.sendCalendarPost(params);
-
-    connect(&m_gateway, &NetworkGateway::calendarUpdated,this,&CalendarEventDialog::eventUpdated);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

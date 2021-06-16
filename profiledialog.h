@@ -1,13 +1,6 @@
 #ifndef PROFILEDIALOG_H
 #define PROFILEDIALOG_H
 
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QMessageBox>
-#include <QUrlQuery>
-#include <QRegExp>
-
 #include "ProgramSettings.h"
 #include "networkgateway.h"
 

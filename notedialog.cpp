@@ -2,7 +2,6 @@
 #include "ui_notedialog.h"
 #include "ProgramSettings.h"
 
-
 NoteDialog::NoteDialog(QWidget *parent, QString savedNote):
     QDialog(parent),
     m_isOldNote(false),

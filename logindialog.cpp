@@ -23,6 +23,7 @@ LoginDialog::~LoginDialog()
 
 void LoginDialog::credentialsAccepted()
 {
+    ///Get reply from gateway
     QString typeReply = m_gateway.getCredentialsReply();
 
     if(typeReply == "register")
@@ -58,7 +59,7 @@ void LoginDialog::on_pb_diaReg_clicked()
     }
     else
     {
-        //m_gateway.registerUserDatabase(ui->le_diaRegUsername->text(),ui->le_diaRegPassword->text(),ui->le_diaRegEmail->text());
+        ///Generate post to register new user
         QVector<QString> postVector;
         postVector.push_back("register");
         postVector.push_back(ui->le_logDiaUsername->text());
@@ -72,7 +73,6 @@ void LoginDialog::on_pb_diaReg_clicked()
 
 void LoginDialog::on_pb_login_clicked()
 {
-
     if(ui->le_logDiaUsername->text().isEmpty() || ui->le_logDiaPassword->text().isEmpty())
     {
         QMessageBox msgBox;
@@ -85,6 +85,7 @@ void LoginDialog::on_pb_login_clicked()
     }
     else
     {
+        ///Generate post to check given credentials
         QVector<QString> postVector;
         postVector.push_back("check");
         postVector.push_back(ui->le_logDiaUsername->text());
@@ -97,5 +98,6 @@ void LoginDialog::on_pb_login_clicked()
 
 void LoginDialog::on_pb_newRegister_clicked()
 {
+    ///change page to register side
     ui->stackedWidget->setCurrentIndex(1);
 }
