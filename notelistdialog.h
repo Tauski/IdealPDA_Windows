@@ -1,17 +1,9 @@
 #ifndef NOTELISTDIALOG_H
 #define NOTELISTDIALOG_H
 
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QJsonDocument>
-#include <QMessageBox>
-#include <QPushButton>
-#include <QJsonObject>
-#include <QJsonArray>
-#include <QUrlQuery>
-
 #include "notedialog.h"
+#include "networkgateway.h"
+#include <QPushButton>
 
 namespace Ui {
 class NoteListDialog;
@@ -38,7 +30,7 @@ private slots:
     void retrieveNotes();
 
     ///Itarate through all notes and add QPushButtons for each note
-    void onRequestFinished(QNetworkReply *nlReply);
+    void onRequestFinished();
 
     ///Open new noteDialog with saved notes data
     void noteClicked();
@@ -58,7 +50,8 @@ private:
     QVector<QPair<QString,QString>> m_noteVector;
 
     ///Object of NetworkAccessManager
-    QNetworkAccessManager * m_manager;
+    //QNetworkAccessManager * m_manager;
+    NetworkGateway m_gateway;
 
 };
 

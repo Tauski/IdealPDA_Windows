@@ -39,3 +39,5 @@ debug/moc_weatherdialog.cpp
 ui_weatherdialog.h
 IdealPDA_Windows.pro.user
 IdealPDA_Windows.pro.user
+debug/moc_calendarpushbutton.cpp
+debug/moc_networkgateway.cpp

@@ -5,7 +5,6 @@
 #include <QMessageBox>
 #include <QStackedWidget>
 
-#include "credentialsgateway.h"
 #include "notedialog.h"
 #include "calendardialog.h"
 #include "notelistdialog.h"
@@ -48,8 +47,6 @@ private slots:
 
     ///Opens calendar dialog
     void on_mw_pb_calendar_clicked();
-
-    void on_mw_pb_weather_pressed();
 
 private:
 

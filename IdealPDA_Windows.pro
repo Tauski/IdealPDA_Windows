@@ -12,10 +12,11 @@ SOURCES += \
     ProgramSettings.cpp \
     calendardialog.cpp \
     calendareventdialog.cpp \
-    credentialsgateway.cpp \
+    calendarpushbutton.cpp \
     logindialog.cpp \
     main.cpp \
     mainwindow.cpp \
+    networkgateway.cpp \
     notedialog.cpp \
     notelistdialog.cpp \
     profiledialog.cpp \
@@ -26,9 +27,10 @@ HEADERS += \
     ProgramSettings.h \
     calendardialog.h \
     calendareventdialog.h \
-    credentialsgateway.h \
+    calendarpushbutton.h \
     logindialog.h \
     mainwindow.h \
+    networkgateway.h \
     notedialog.h \
     notelistdialog.h \
     profiledialog.h \

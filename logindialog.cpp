@@ -9,8 +9,7 @@ LoginDialog::LoginDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0);
-    connect(&m_gateway,SIGNAL(requestDone()),this,SLOT(loginAccepted()));
-    connect(&m_gateway,SIGNAL(registerDone()),this, SLOT(registerAccepted()));
+    connect(&m_gateway,&NetworkGateway::credentialsOk,this,&LoginDialog::credentialsAccepted);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -22,23 +21,24 @@ LoginDialog::~LoginDialog()
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-void LoginDialog::loginAccepted()
+void LoginDialog::credentialsAccepted()
 {
-    qDebug() << "login done";
+    QString typeReply = m_gateway.getCredentialsReply();
 
-    this->accept();
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-
-void LoginDialog::registerAccepted()
-{
-    qDebug() << "register done";
-    ui->stackedWidget->setCurrentIndex(0);
-    QMessageBox msgBox;
-    msgBox.setIcon(QMessageBox::Information);
-    msgBox.setText("New user registered");
-    msgBox.exec();
+    if(typeReply == "register")
+    {
+        qDebug() << "register done";
+        ui->stackedWidget->setCurrentIndex(0);
+        QMessageBox msgBox;
+        msgBox.setIcon(QMessageBox::Information);
+        msgBox.setText("New user registered, now login using your username and password");
+        msgBox.exec();
+    }
+    else if(typeReply == "login")
+    {
+        qDebug() << "login done";
+        this->accept();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -58,7 +58,13 @@ void LoginDialog::on_pb_diaReg_clicked()
     }
     else
     {
-        m_gateway.registerUserDatabase(ui->le_diaRegUsername->text(),ui->le_diaRegPassword->text(),ui->le_diaRegEmail->text());
+        //m_gateway.registerUserDatabase(ui->le_diaRegUsername->text(),ui->le_diaRegPassword->text(),ui->le_diaRegEmail->text());
+        QVector<QString> postVector;
+        postVector.push_back("register");
+        postVector.push_back(ui->le_logDiaUsername->text());
+        postVector.push_back(ui->le_diaRegEmail->text());
+        postVector.push_back(ui->le_logDiaPassword->text());
+        m_gateway.sendCredentialsPost(postVector);
     }
 }
 
@@ -76,8 +82,14 @@ void LoginDialog::on_pb_login_clicked()
 
         ui->le_logDiaUsername->setText("");
         ui->le_logDiaPassword->setText("");
-    }else{
-        m_gateway.checkCredentials(ui->le_logDiaUsername->text(),ui->le_logDiaPassword->text());
+    }
+    else
+    {
+        QVector<QString> postVector;
+        postVector.push_back("check");
+        postVector.push_back(ui->le_logDiaUsername->text());
+        postVector.push_back(ui->le_logDiaPassword->text());
+        m_gateway.sendCredentialsPost(postVector);
     }
 }
 

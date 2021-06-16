@@ -4,15 +4,10 @@
 ProfileDialog::ProfileDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ProfileDialog),
-    m_emailIsChanged(false),
-    m_usernameIsChanged(false),
-    m_passwordIsChanged(false),
-    m_locationIsChanged(false),
     m_newUsername(),
     m_newEmail(),
-    m_manager(new QNetworkAccessManager(this))
+    m_gateway(this)
 {
-
     ui->setupUi(this);
 
     ///Set current value labels
@@ -21,9 +16,10 @@ ProfileDialog::ProfileDialog(QWidget *parent) :
     ui->pd_label_curEmail->setText(g_userEmail);
     ui->pd_label_curlocation->setText(g_userLocation);
 
-
-    connect(m_manager, &QNetworkAccessManager::finished, this, &ProfileDialog::updateSent);
+    connect(&m_gateway, &NetworkGateway::credentialsUpdated, this, &ProfileDialog::updateConfirmed);
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 ProfileDialog::~ProfileDialog()
 {
@@ -69,26 +65,23 @@ void ProfileDialog::on_pd_bp_saveChanges_clicked()
         ui->pd_le_newPass->setText("");
     }
 
-
     ///Create network request
-    QUrl updateUrl(m_updateUrl);
-    QUrlQuery params;
-    params.addQueryItem("old_name", ui->pd_label_curUname->text());
-    params.addQueryItem("new_name", newUsernameString);
-    params.addQueryItem("old_password", ui->pd_le_curPassword->text());
-    params.addQueryItem("new_password", ui->pd_le_newPass->text());
-    params.addQueryItem("old_email", ui->pd_label_curEmail->text());
-    params.addQueryItem("new_email", newEmailString);
-    params.addQueryItem("old_location", ui->pd_label_curlocation->text());
-    params.addQueryItem("new_location", newLocationString);
+    QVector<QString> params;
+    params.push_back("change");
+    params.push_back(ui->pd_label_curUname->text());
+    params.push_back(newUsernameString);
+    params.push_back(ui->pd_le_curPassword->text());
+    params.push_back(ui->pd_le_newPass->text());
+    params.push_back(ui->pd_label_curEmail->text());
+    params.push_back(newEmailString);
+    params.push_back(ui->pd_label_curlocation->text());
+    params.push_back(newLocationString);
+    m_gateway.sendCredentialsPost(params);
 
     ///Insert possible new values.
     m_newUsername = newUsernameString;
     m_newEmail = newEmailString;
     m_newLocation = newLocationString;
-
-    QNetworkRequest request(updateUrl);
-    m_manager->post(request, params.query().toUtf8());
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -96,7 +89,6 @@ void ProfileDialog::on_pd_bp_saveChanges_clicked()
 void ProfileDialog::on_pd_le_newPass_editingFinished()
 {
     ui->pd_bp_saveChanges->show();
-    m_passwordIsChanged = true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -104,7 +96,6 @@ void ProfileDialog::on_pd_le_newPass_editingFinished()
 void ProfileDialog::on_pd_le_newUsername_editingFinished()
 {
     ui->pd_bp_saveChanges->show();
-    m_usernameIsChanged = true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,7 +103,6 @@ void ProfileDialog::on_pd_le_newUsername_editingFinished()
 void ProfileDialog::on_pd_le_newEmail_editingFinished()
 {
     ui->pd_bp_saveChanges->show();
-    m_emailIsChanged = true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -120,18 +110,16 @@ void ProfileDialog::on_pd_le_newEmail_editingFinished()
 void ProfileDialog::on_pd_le_newlocation_textChanged(const QString &arg1)
 {
     ui->pd_bp_saveChanges->show();
-    m_locationIsChanged = true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-void ProfileDialog::updateSent(QNetworkReply *uReply)
+void ProfileDialog::updateConfirmed()
 {
-    QByteArray replyArray = uReply->readAll();
-    qDebug() << replyArray;
+    QString replyString = m_gateway.getCredentialsReply();
 
-    ///New values confirmed
-    if(!replyArray.contains("ERROR")) //Error echoes only when something went wrong
+    ///New values confirmed update globals
+    if(!replyString.contains("ERROR")) //Error echoes only when something went wrong
     {
         this->accept();
 
@@ -143,7 +131,7 @@ void ProfileDialog::updateSent(QNetworkReply *uReply)
     {
         QMessageBox profileMsg;
         profileMsg.setIcon(QMessageBox::Warning);
-        profileMsg.setText("Error while updating data... please try again \n" + replyArray);
+        profileMsg.setText("Error while updating data... please try again \n" + replyString);
         profileMsg.exec();
     }
 }

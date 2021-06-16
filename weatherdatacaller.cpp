@@ -332,10 +332,6 @@ void WeatherDataCaller::findHighest(QVector<QPair<QString, QString>> *compVector
         qDebug() << "was only 1";
         m_highestVector = *compVector;
     }
-
-    ///when single station
-
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////

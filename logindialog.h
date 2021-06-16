@@ -3,7 +3,7 @@
 
 #include <QDialog>
 
-#include "credentialsgateway.h"
+#include "networkgateway.h"
 
 namespace Ui {
 class LoginDialog;
@@ -34,19 +34,16 @@ private slots:
 
 public slots:
 
-    ///Retrieves emitted signal from credentialsGateway when login is done
-    void loginAccepted();
+    ///Retrieves emitted signal from networkGateway when reply is done
+    void credentialsAccepted();
 
-    ///Retrieves emitted signal from credentialsGateway when registration is done
-    void registerAccepted();
 
 private:
 
     Ui::LoginDialog *ui;
 
     ///instance of credentials gateway
-    CredentialsGateway m_gateway;
-
+    NetworkGateway m_gateway;
 };
 
 #endif // LOGINDIALOG_H

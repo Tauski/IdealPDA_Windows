@@ -281,13 +281,13 @@ void WeatherDialog::on_wd_pb_forecast_clicked()
 
 void WeatherDialog::on_wd_pb_forecast_previoushour_clicked()
 {
-    //If next button is not enabled when we press previous hour we enable this
+
     if(!ui->wd_pb_forecast_nexthour->isEnabled())
     {
         ui->wd_pb_forecast_nexthour->setEnabled(true);
     }
 
-    //remove from hours and reset UI
+
     m_forecastHour -= 1;
     setForecastValues();
 
@@ -313,4 +313,12 @@ void WeatherDialog::on_wd_pb_forecast_nexthour_clicked()
 void WeatherDialog::on_wd_pb_forecast_back_clicked()
 {
     ui->stackedwidget_wd->setCurrentIndex(0);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+void WeatherDialog::on_buttonBox_clicked(QAbstractButton *button)
+{
+    ///Close button in weather dialog
+    this->accept();
 }

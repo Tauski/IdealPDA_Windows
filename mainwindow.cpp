@@ -94,8 +94,3 @@ void MainWindow::on_mw_pb_calendar_clicked()
         this->show();
     }
 }
-
-void MainWindow::on_mw_pb_weather_pressed()
-{
-    qDebug() << "this was pressed";
-}

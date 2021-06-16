@@ -9,6 +9,7 @@
 #include <QRegExp>
 
 #include "ProgramSettings.h"
+#include "networkgateway.h"
 
 namespace Ui {
 class ProfileDialog;
@@ -43,8 +44,8 @@ private slots:
     ///Detect changes on emails lineEdit.
     void on_pd_le_newEmail_editingFinished();
 
-    ///Slot for retrieing managers finished signal with reply.
-    void updateSent(QNetworkReply *uReply);
+    ///SLot for m_gateways credentialsUpdated signal.
+    void updateConfirmed();
 
     ///Detect changes on location lineEdit
     void on_pd_le_newlocation_textChanged(const QString &arg1);
@@ -56,11 +57,6 @@ private:
     ///Url used to change user data from database.
     const QString m_updateUrl = "http://192.168.1.103:8012/project/Credentials/userCredentialsChange.php";
 
-    bool m_emailIsChanged;
-    bool m_usernameIsChanged;
-    bool m_passwordIsChanged;
-    bool m_locationIsChanged;
-
     ///Hold new username to update global username variable after reply.
     QString m_newUsername;
 
@@ -71,7 +67,7 @@ private:
     QString m_newLocation;
 
     ///Object of NetworkAccessManager
-    QNetworkAccessManager * m_manager;
+    NetworkGateway m_gateway;
 };
 
 #endif // PROFILEDIALOG_H

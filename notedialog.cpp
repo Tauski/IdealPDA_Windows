@@ -9,17 +9,17 @@ NoteDialog::NoteDialog(QWidget *parent, QString savedNote):
     m_functionSelect(0),
     ui(new Ui::NoteDialog),
     m_savedNote(savedNote),
-    m_manager(new QNetworkAccessManager(this))
+    m_gateway(this,2)
 {
     ui->setupUi(this);
 
-    //if we are not a new noteDialog get saved note and split it for header and body
+    ///if we are not a new note get saved note and split it for header and body
     if(m_savedNote != "")
     {
         if(m_savedNote.contains("H:"))
         {
             QStringList list = m_savedNote.split(QRegExp("H:"));
-            qDebug() << m_savedNote;
+            qDebug() << "saved note from notedialog: " << list.at(0) << list.at(1);
             ui->le_noteHeader->setText(list.at(0));
             ui->te_noteBody->setText(list.at(1));
         }
@@ -29,17 +29,16 @@ NoteDialog::NoteDialog(QWidget *parent, QString savedNote):
         }
         m_isOldNote = true;
     }
-    else //we are new note so hide delete button
+    else
     {
         ui->pb_noteDiagDelete->hide();
     }
-    connect(m_manager, &QNetworkAccessManager::finished,this, &NoteDialog::noteSent);
+    connect(&m_gateway, &NetworkGateway::notesOk,this, &NoteDialog::noteSent);
 }
 
 NoteDialog::~NoteDialog()
 {
     delete ui;
-    delete m_manager;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -66,13 +65,11 @@ void NoteDialog::on_pb_noteDiagSave_clicked()
     else
     {
         QString compinedHeaderBody = header + "H:" + noteBody;
-        //send to rest api
-        QUrl saveNoteUrl(m_saveUrl);
-        QUrlQuery params;
-        params.addQueryItem("fl_name", g_username);
-        params.addQueryItem("incnote",compinedHeaderBody);
-        QNetworkRequest request(saveNoteUrl);
-        m_manager->post(request, params.query().toUtf8());
+        QVector<QString> params;
+        params.push_back("saveNote");
+        params.push_back(g_username);
+        params.push_back(compinedHeaderBody);
+        m_gateway.sendNotePost(params);
     }
 }
 
@@ -82,14 +79,11 @@ void NoteDialog::on_pb_noteDiagDelete_clicked()
 {
     m_functionSelect = 2;
 
-    //might not get activated as accepted signal is send before.
-    QUrl saveNoteUrl(m_deleteUrl);
-    QUrlQuery params;
-    params.addQueryItem("fl_name", g_username);
-    params.addQueryItem("oldnote", m_savedNote);
-
-    QNetworkRequest request(saveNoteUrl);
-    m_manager->post(request, params.query().toUtf8());
+    QVector<QString> params;
+    params.push_back("deleteNote");
+    params.push_back(g_username);
+    params.push_back(m_savedNote);
+    m_gateway.sendNotePost(params);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -98,31 +92,27 @@ void NoteDialog::updateNote(QString newHeader, QString newBody)
 {
     m_functionSelect = 3;
 
-    //compine header and body for sending
+    ///compine header and body for sending
     QString compinedHeaderBody = newHeader + "H:" + newBody;
 
-    QUrl saveNoteUrl(m_updateUrl);
-    QUrlQuery params;
-    params.addQueryItem("fl_name", g_username); // give key determined on PHP side and string to insert
-    params.addQueryItem("incnote", compinedHeaderBody);
-    params.addQueryItem("oldnote", m_savedNote);
+    QVector<QString> params;
+    params.push_back("updateNote");
+    params.push_back(g_username);
+    params.push_back(compinedHeaderBody);
+    params.push_back(m_savedNote);
+    m_gateway.sendNotePost(params);
 
-    //create request and set manager to send it with rule according to your php file
-    QNetworkRequest request(saveNoteUrl);
-    m_manager->post(request, params.query().toUtf8());
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-void NoteDialog::noteSent(QNetworkReply *nReply)
+void NoteDialog::noteSent()
 {
-
-    QByteArray noteArray = nReply->readAll();
-    nReply->deleteLater();
-
-    ///todo: handle all error possibilities using using noteArray that holds echo from php api
-    this->accept(); //send accepted signal when regardless of reply type
+    QString reply = m_gateway.getNoteReply();
+    this->accept();
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 void NoteDialog::on_pg_noteDiagExit_clicked()
 {

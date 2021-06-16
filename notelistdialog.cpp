@@ -6,10 +6,11 @@ NoteListDialog::NoteListDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::NoteListDialog),
     m_noteVector(),
-    m_manager(new QNetworkAccessManager(this))
+    m_gateway(this,2)
 {
     ui->setupUi(this);
-    connect(m_manager, &QNetworkAccessManager::finished, this, &NoteListDialog::onRequestFinished);
+    connect(&m_gateway, &NetworkGateway::notesListOk, this, &NoteListDialog::onRequestFinished);
+
     retrieveNotes();
 }
 
@@ -22,74 +23,26 @@ NoteListDialog::~NoteListDialog()
 
 void NoteListDialog::retrieveNotes()
 {
-    QUrl getAllNotesUrl(m_getAllNotesUrl);
-    QUrlQuery params;
-    params.addQueryItem("f_name",g_username); // give key determined on PHP side and string to insert
-    QNetworkRequest request(getAllNotesUrl);
-    m_manager->post(request, params.query().toUtf8());
+    QVector<QString> params;
+    params.push_back("getAllNotes");
+    params.push_back(g_username);
+    m_gateway.sendNotePost(params);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-void NoteListDialog::onRequestFinished(QNetworkReply *nlReply)
+void NoteListDialog::onRequestFinished()
 {
-    QJsonDocument doc = QJsonDocument::fromJson(nlReply->readAll());
+    ///if no work try change this to fwd
+    m_noteVector = m_gateway.getNoteListReply();
 
-    qDebug() << "whole document : " << doc;
-
-    if(!doc.isNull())
+    for(int i = 0; i < m_noteVector.size(); i++)
     {
-        if(doc.isObject())
-        {
-            QJsonObject obj = doc.object();
-            qDebug () << "json obj : " << obj;
+        QPushButton *button = new QPushButton(m_noteVector.at(i).first,this);
+        connect(button, SIGNAL(clicked()),this,SLOT(noteClicked()));
 
-            if(!obj.isEmpty())
-            {
-                QJsonArray jsonArray = obj["data"].toArray();
-
-                foreach (const QJsonValue & value, jsonArray)
-                {
-                    QJsonObject obj = value.toObject();
-                    QString note = (obj["note"].toString());
-                    QPushButton *button = new QPushButton(note,this);
-
-                    //If button has dedicated header set it as text for the button
-                    if(note.contains("H:"))
-                    {
-                        QStringList list = note.split(QRegExp("H:"));
-                        button->setText(list.at(0));
-                    }
-
-                    //Connect signal for created noteButton and add it to layout
-                    connect(button,SIGNAL(clicked()),this,SLOT(noteClicked()));
-
-                    //create vector that holds notes and headers
-                    if(!button->text().isEmpty())
-                    {
-                        QPair<QString,QString> pairHeader;
-                        pairHeader.first = button->text(); //this contains header
-                        pairHeader.second = note.split(QRegExp("H:")).at(1); //bring only body of the note
-                        m_noteVector.push_back(pairHeader);
-                    }
-
-                    qDebug() << "note: " << note;
-                    ui->gb_layout->addWidget(button);
-                }
-            }
-            else
-            {
-                qDebug () << "Json object is  empty :";
-            }
-        }
-        else
-        {
-            qDebug () << "Json Document is not Object :";
-        }
+        ui->gb_layout->addWidget(button);
     }
-
-    //qDebug() << nlArray;
-    nlReply->deleteLater();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -101,10 +54,12 @@ void NoteListDialog::noteClicked()
     QString noteConstructorString;
 
     QPushButton *button = (QPushButton *)sender();
+
+    qDebug() << button->text() << " was note header";
     for(int i = 0; i < m_noteVector.size(); i++)
     {
         //If note contains dedicated header string we need to get whole string for noteDialog
-        if(m_noteVector.at(i).first == button->text())
+        if(m_noteVector.at(i).first != "")
         {
             noteConstructorString = m_noteVector.at(i).first + "H:" + m_noteVector.at(i).second;
         }
@@ -130,5 +85,5 @@ void NoteListDialog::noteClicked()
 
 void NoteListDialog::updateList()
 {
-
+    ///TODO:
 }

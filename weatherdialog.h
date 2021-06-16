@@ -48,6 +48,8 @@ private slots:
     ///Returns to current weather page
     void on_wd_pb_forecast_back_clicked();
 
+    void on_buttonBox_clicked(QAbstractButton *button);
+
 private:
 
     Ui::WeatherDialog *ui;

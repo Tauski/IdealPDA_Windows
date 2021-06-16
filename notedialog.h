@@ -1,12 +1,7 @@
 #ifndef NOTEDIALOG_H
 #define NOTEDIALOG_H
 
-#include <QNetworkAccessManager>
-#include <QNetworkRequest>
-#include <QMessageBox>
-#include <QNetworkReply>
-#include <QUrlQuery>
-#include <QVector>
+#include "networkgateway.h"
 
 namespace Ui {
 class NoteDialog;
@@ -37,7 +32,7 @@ private slots:
     void updateNote(QString newHeader, QString newBody);
 
     ///Slot for managers reply
-    void noteSent(QNetworkReply * nReply);
+    void noteSent();
 
     ///Slot for exit button clicked, Closes the dialog with accepted signal so Notelist or mainwindow can continue.
     void on_pg_noteDiagExit_clicked();
@@ -53,16 +48,10 @@ private:
     ///Ui handle
     Ui::NoteDialog *ui;
 
-    ///Specific url for saving user given notes.
-    const QString m_saveUrl = "http://192.168.1.103:8012/project/Notepad/userNotesInsert.php";
-    const QString m_deleteUrl = "http://192.168.1.103:8012/project/Notepad/userNotesDelete.php";
-    const QString m_updateUrl = "http://192.168.1.103:8012/project/Notepad/userNotesUpdate.php";
-
     ///Saved note that was used in the constructor
     const QString m_savedNote;
 
-    ///object of manager
-    QNetworkAccessManager* m_manager;
+    NetworkGateway m_gateway;
 };
 
 #endif // NOTEDIALOG_H
