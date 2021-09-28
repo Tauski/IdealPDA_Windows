@@ -1,6 +1,8 @@
 #include "weatherdialog.h"
 #include "ui_weatherdialog.h"
 
+#include <QImageReader>
+
 WeatherDialog::WeatherDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::WeatherDialog),
@@ -51,12 +53,12 @@ void WeatherDialog::onWeatherRefresh()
     }
     else /// we have some location
     {
-        ///if we have empty location lineedit
+        ///if we have empty location line edit
         if(g_userLocation != "locationPlaceHolder" && ui->wd_le_newLocation->text().isEmpty())
         {
             m_weatherCaller = new WeatherDataCaller(nullptr,0,g_userLocation);
         }
-        else if(g_userLocation != "locationPlaceHolder")/// line edit has data
+        else if(g_userLocation != "locationPlaceHolder")/// location line edit has data
         {
             m_weatherCaller = new WeatherDataCaller(nullptr,0,ui->wd_le_newLocation->text());
         }
@@ -91,6 +93,11 @@ void WeatherDialog::setForecastValues()
 {
     ///Get forecast data from caller and insert it into local vector
     QVector<QPair<QString,QVector<QString>>> forecastVector = m_weatherCaller->getWeatherForecast();
+
+    ///Setup backgrounds
+    //ui->wd_wdgt_background->setStyleSheet("background-image: url()");
+    //setStyleSheet("background-image:url(:/images/images/cloudy.jpg)");
+    //ui->wd_wdgt_background->setStyleSheet("background-image:url(:/images/intense_thunder.jpg)");
 
     QString weatherType = "";
     switch (forecastVector.at(m_forecastHour).second.at(6).split(".").first().toInt())

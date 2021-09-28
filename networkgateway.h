@@ -26,6 +26,11 @@ class NetworkGateway : public QObject
 public:
 
     explicit NetworkGateway(QObject *parent = nullptr, int type = 0);
+    ~NetworkGateway();
+
+    ///Simple ping handling to see if connection is up
+    void sendPingPost();
+    QString getPingReply(){return m_pingReply;}
 
     ///Credentials post creation and reply handling
     void sendCredentialsPost(QVector<QString> crPost);
@@ -41,14 +46,20 @@ public:
     QString getNoteReply() {return m_noteReply;};
     QVector<QPair<QString,QString>> getNoteListReply() {return m_noteListReply;}
 
+
+
 public slots:
 
     ///QNetworkManagers replies slots
+    void pingReply(QNetworkReply *pingReply);
     void credentialsReply(QNetworkReply *creReply);
     void calendarReply(QNetworkReply *calReply);
     void noteReply(QNetworkReply * nReply);
 
 signals:
+
+    ///Ping
+    void pingOk();
 
     ///Credentials
     void credentialsOk();
@@ -117,6 +128,9 @@ private:
     QNetworkAccessManager *m_manager;
     const int m_type;
     QString m_activeUrl;
+
+    ///ping members
+    QString m_pingReply;
 
     ///credentials members
     QString m_username;

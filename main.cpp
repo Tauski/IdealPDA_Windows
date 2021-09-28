@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "logindialog.h"
 
+#include <QFile>
+
 /**
 
         /// all included data
@@ -67,6 +69,14 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+    ///TESTING STYLESHEETS
+    ///open qss file for application wide stylesheet (https://qss-stock.devsecstudio.com/) for nice looking free stylesheets
+    QFile file(":/qss/SyNet.qss");
+    file.open(QFile::ReadOnly);
+
+    QString styleSheet { QLatin1String(file.readAll())};
+    a.setStyleSheet(styleSheet);
 
     MainWindow w;
     LoginDialog ld;

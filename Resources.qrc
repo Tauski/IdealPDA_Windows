@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/images">
+        <file>cloudy.jpg</file>
+        <file>intense_thunder.jpg</file>
+        <file>partly_cloudy.jpg</file>
+        <file>slight rain.jpg</file>
+        <file>sunny.jpg</file>
+        <file>thunder.jpg</file>
+    </qresource>
+    <qresource prefix="/qss">
+        <file>SyNet.qss</file>
+    </qresource>
+</RCC>

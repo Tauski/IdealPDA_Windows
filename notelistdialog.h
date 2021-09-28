@@ -49,8 +49,7 @@ private:
     ///Vector witch has all notes header in first string, body in second
     QVector<QPair<QString,QString>> m_noteVector;
 
-    ///Object of NetworkAccessManager
-    //QNetworkAccessManager * m_manager;
+    ///Object of NetworkAccessManager through own class networkgateway
     NetworkGateway m_gateway;
 
 };

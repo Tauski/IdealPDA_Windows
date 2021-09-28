@@ -36,6 +36,8 @@ public slots:
     ///Retrieves emitted signal from networkGateway when reply is done
     void credentialsAccepted();
 
+    void pingRecieved();
+
 private:
 
     Ui::LoginDialog *ui;

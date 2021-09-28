@@ -102,7 +102,9 @@ void CalendarDialog::calendarButtonClicked()
         QLayoutItem *child;
         while((child = ui->cd_vl_eventListLayout->takeAt(0)) != 0)
         {
-            if(child->widget());
+            ///REMOVED SEMICOLON FROM THE END OF IF STATEMENT
+            if(child->widget())
+
             child->widget()->setParent(NULL);
             delete child;
         }

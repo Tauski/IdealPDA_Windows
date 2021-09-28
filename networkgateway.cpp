@@ -4,7 +4,7 @@ NetworkGateway::NetworkGateway(QObject *parent, int type)
     : QObject(parent),
       m_manager(new QNetworkAccessManager(this)),
       m_type(type)
-{
+{   
     if(m_type == 0) ///Credentials
     {
         connect(m_manager,&QNetworkAccessManager::finished,this,&NetworkGateway::credentialsReply);
@@ -17,7 +17,37 @@ NetworkGateway::NetworkGateway(QObject *parent, int type)
     {
         connect(m_manager,&QNetworkAccessManager::finished,this,&NetworkGateway::noteReply);
     }
+    else if(m_type == 3) ///ping
+    {
+        connect(m_manager,&QNetworkAccessManager::finished,this,&NetworkGateway::pingReply);
+    }
 }
+
+NetworkGateway::~NetworkGateway()
+{
+    delete m_manager;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void NetworkGateway::sendPingPost()
+{
+    ///TODO:
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+void NetworkGateway::pingReply(QNetworkReply* pingReply)
+{
+    QByteArray array = pingReply->readAll();
+    QString reply = array;
+    qDebug() << "Ping : " << reply;
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -126,7 +156,7 @@ void NetworkGateway::credentialsReply(QNetworkReply *creReply)
         m_credentialsReply = "updated";
         emit credentialsUpdated();
     }
-    else if(reply.contains("ERROR:"))
+    else if(reply.contains("ERROR:") || reply == "")
     {
         QMessageBox msgBox;
         msgBox.setIcon(QMessageBox::Warning);

@@ -41,3 +41,6 @@ IdealPDA_Windows.pro.user
 IdealPDA_Windows.pro.user
 debug/moc_calendarpushbutton.cpp
 debug/moc_networkgateway.cpp
+*.jpg
+debug/qrc_Resources.cpp
+SyNet.qss

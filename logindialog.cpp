@@ -10,6 +10,9 @@ LoginDialog::LoginDialog(QWidget *parent) :
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0);
     connect(&m_gateway,&NetworkGateway::credentialsOk,this,&LoginDialog::credentialsAccepted);
+    connect(&m_gateway,&NetworkGateway::pingOk,this,&LoginDialog::pingRecieved);
+
+    m_gateway.sendPingPost();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -39,6 +42,23 @@ void LoginDialog::credentialsAccepted()
     {
         qDebug() << "login done";
         this->accept();
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+void LoginDialog::pingRecieved()
+{
+    ///Reply
+    QString pingReply = m_gateway.getPingReply();
+
+    if(pingReply == "Ok")
+    {
+
+    }
+    else if (pingReply == "NoCon")
+    {
+
     }
 }
 

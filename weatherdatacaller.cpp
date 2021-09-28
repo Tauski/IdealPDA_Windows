@@ -16,15 +16,12 @@ WeatherDataCaller::WeatherDataCaller(QObject *parent, int typeID, QString locati
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 WeatherDataCaller::~WeatherDataCaller()
-{
-    qDebug()<<"wdc destructor";
-}
+{}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void WeatherDataCaller::updateRequest(QString newRequest)
 {
-    qDebug() << "update request for: " + newRequest;
 
     QString urlStartTime;
     QString urlEndTime;
@@ -42,23 +39,17 @@ void WeatherDataCaller::updateRequest(QString newRequest)
     QString newLocation = newRequest;
     if(m_typeID == 0) ///we wanted current weather data
     {
-        qDebug() << "update request 3: newtime: " + urlStartTime+ ", oldTIme: " + urlEndTime + ", location: " + newLocation;
-
         QUrl weatherUrl("http://opendata.fmi.fi/wfs/fin");
         weatherUrl.setQuery("?service=WFS&version=2.0.0&request=GetFeature&storedquery_id=fmi::observations::weather::simple&place="+newLocation+"&parameters=ws,temperature,pressure&starttime=" + urlStartTime + "&endtime=" + urlEndTime + "&timestep=1&");
         QNetworkRequest request(weatherUrl);
-        qDebug()<<"created requeset with url:" << weatherUrl;
         m_webCtrl->get(request);
-        qDebug()<<"get Request weather";
     }
     else /// we wanted weather forecast
     {
         QUrl weatherUrl("http://opendata.fmi.fi/wfs");
         weatherUrl.setQuery("?service=WFS&version=2.0.0&request=getFeature&storedquery_id=fmi::forecast::hirlam::surface::point::multipointcoverage&place="+newLocation+"&");
         QNetworkRequest request(weatherUrl);
-        qDebug()<<"created requeset with url:" << weatherUrl;
         m_webCtrl->get(request);
-        qDebug()<<"get Request forecast";
     }
 }
 
@@ -66,7 +57,6 @@ void WeatherDataCaller::updateRequest(QString newRequest)
 
 void WeatherDataCaller::fileDownloaded(QNetworkReply* pReply)
 {
-    qDebug()<<"got to downloaded";
     m_downloadedData = pReply->readAll();
     pReply->deleteLater();
     m_webCtrl->deleteLater();
@@ -204,12 +194,10 @@ void WeatherDataCaller::solveData(QByteArray resultArray)
         ///handle data from different stations
         if(!xmlVector.empty() && valueList.empty())
         {
-            qDebug()<< xmlVector;
             ///iterate every other element to only include numeric values
             QPair<QString, QString> station_valuePair;
             for(int i = 0; i < xmlVector.size(); i++)
             {
-                qDebug() << i;
                 station_valuePair.first = m_location;
                 station_valuePair.second = xmlVector.at(i);
                 allValues.push_back(station_valuePair);
@@ -252,8 +240,6 @@ void WeatherDataCaller::solveData(QByteArray resultArray)
 void WeatherDataCaller::findHighest(QVector<QPair<QString, QString>> *compVector)
 {
     ///when multiple stations
-
-    qDebug() << *compVector;
 
     QVector<double> wsVec = {0};
     QString wsStation = "";
@@ -323,7 +309,6 @@ void WeatherDataCaller::findHighest(QVector<QPair<QString, QString>> *compVector
     }
     else if(size == 1)
     {
-        qDebug() << "was only 1";
         m_highestVector = *compVector;
     }
 }
